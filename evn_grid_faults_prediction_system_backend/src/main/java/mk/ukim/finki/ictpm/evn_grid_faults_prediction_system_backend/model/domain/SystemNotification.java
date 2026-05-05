@@ -30,7 +30,6 @@ public class SystemNotification {
     @JoinColumn(
             name = "user_id",
             nullable = false,
-            unique = true,
             foreignKey = @ForeignKey(name = "fk_system_notification_user")
     )
     private User user;
