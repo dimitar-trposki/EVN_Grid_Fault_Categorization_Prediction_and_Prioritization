@@ -9,6 +9,7 @@ import lombok.NonNull;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.constants.JwtConstants;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.helpers.JwtHelper;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.domain.User;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.TokenBlacklistService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,12 +28,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtHelper jwtHelper;
     private final UserService userService;
+    private final TokenBlacklistService tokenBlacklistService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public JwtFilter(JwtHelper jwtHelper, UserService userService,
+                     TokenBlacklistService tokenBlacklistService,
                      @Qualifier("handlerExceptionResolver") HandlerExceptionResolver handlerExceptionResolver) {
         this.jwtHelper = jwtHelper;
         this.userService = userService;
+        this.tokenBlacklistService = tokenBlacklistService;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
@@ -49,6 +53,11 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = headerValue.substring(JwtConstants.TOKEN_PREFIX.length());
+
+        if (tokenBlacklistService.isBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
 
         try {
             String username = jwtHelper.extractUsername(token);

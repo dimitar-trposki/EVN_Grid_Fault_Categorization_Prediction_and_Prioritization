@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
     UserProfileDto getProfile(String email);
 
     UserProfileDto updateProfile(String email, UpdateProfileDto dto);
+
+    void logout(String token);
 }
