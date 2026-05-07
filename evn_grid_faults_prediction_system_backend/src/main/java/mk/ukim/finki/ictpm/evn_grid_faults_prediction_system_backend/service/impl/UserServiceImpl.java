@@ -10,6 +10,7 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.domai
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enums.RoleType;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.CustomerRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.UserRepository;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.TokenBlacklistService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,15 +27,18 @@ public class UserServiceImpl implements UserService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtHelper jwtHelper;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public UserServiceImpl(UserRepository userRepository,
                            CustomerRepository customerRepository,
                            PasswordEncoder passwordEncoder,
-                           JwtHelper jwtHelper) {
+                           JwtHelper jwtHelper,
+                           TokenBlacklistService tokenBlacklistService) {
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtHelper = jwtHelper;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -86,6 +90,11 @@ public class UserServiceImpl implements UserService {
                 user.getLastName(),
                 user.getUserRole()
         );
+    }
+
+    @Override
+    public void logout(String token) {
+        tokenBlacklistService.blacklist(token, jwtHelper.extractExpiration(token));
     }
 
     @Override
