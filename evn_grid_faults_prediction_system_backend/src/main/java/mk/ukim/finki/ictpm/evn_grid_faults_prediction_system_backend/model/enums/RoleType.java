@@ -2,7 +2,9 @@ package mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enum
 
 public enum RoleType {
     ADMIN,
+    OPERATOR,
     DISPATCHER,
-    TECHNICIAN,
-    USER
+    MANAGER,
+    FIELD_CREW,
+    CUSTOMER
 }

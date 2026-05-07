@@ -4,5 +4,6 @@ public enum FaultClassification {
     ELECTRICAL,
     MECHANICAL,
     SOFTWARE,
-    NETWORK
+    NETWORK,
+    OTHER
 }
