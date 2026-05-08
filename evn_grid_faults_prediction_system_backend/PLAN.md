@@ -89,7 +89,7 @@
 
 - [x] **Repository custom methods** — `EquipmentRepository`: `findByLocationId`, `findByEquipmentType`, `findByLocationIdAndEquipmentType`
 - [x] **Request DTOs** — `EquipmentRequest` (name, equipmentType, locationId) (record)
-- [x] **Response DTOs** — `EquipmentResponse` (full with region info), `EquipmentSummaryResponse` (record)
+- [x] **Response DTOs** — `EquipmentResponse` (full, with region info), `EquipmentSummaryResponse` (record)
 - [x] **Service interface** — `EquipmentService`
 - [x] **Service implementation** — `EquipmentServiceImpl`
 - [x] **Controller + endpoints** — `EquipmentController`: full CRUD at `/api/v1/equipment` (ADMIN write / authenticated read); `GET /api/v1/locations/{locationId}/equipment`; `GET /api/v1/equipment/by-type`

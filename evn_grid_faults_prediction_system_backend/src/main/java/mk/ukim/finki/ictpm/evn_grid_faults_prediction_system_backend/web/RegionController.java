@@ -23,7 +23,8 @@ public class RegionController {
     private final LocationService locationService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<RegionResponse> create(@RequestBody @Valid CreateRegionRequest request) {
         return ResponseEntity.ok(regionService.create(request));
     }
@@ -41,7 +42,8 @@ public class RegionController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<RegionResponse> update(
             @PathVariable Long id,
             @RequestBody @Valid UpdateRegionRequest request
@@ -50,7 +52,8 @@ public class RegionController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         regionService.delete(id);
         return ResponseEntity.noContent().build();

@@ -19,25 +19,29 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<CustomerResponse>> getAll() {
         return ResponseEntity.ok(customerService.getAll());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CustomerResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.getById(id));
     }
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('CUSTOMER')")
+//    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CustomerResponse> getCurrent() {
         return ResponseEntity.ok(customerService.getCurrent());
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'OPERATOR')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CustomerResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateCustomerRequest request
@@ -46,7 +50,8 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         customerService.delete(id);
         return ResponseEntity.noContent().build();

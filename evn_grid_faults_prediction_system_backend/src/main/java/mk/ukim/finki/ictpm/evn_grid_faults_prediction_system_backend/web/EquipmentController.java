@@ -44,7 +44,8 @@ public class EquipmentController {
     }
 
     @PutMapping("/api/v1/equipment/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<EquipmentResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody EquipmentRequest request
@@ -53,7 +54,8 @@ public class EquipmentController {
     }
 
     @DeleteMapping("/api/v1/equipment/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         equipmentService.delete(id);
         return ResponseEntity.noContent().build();

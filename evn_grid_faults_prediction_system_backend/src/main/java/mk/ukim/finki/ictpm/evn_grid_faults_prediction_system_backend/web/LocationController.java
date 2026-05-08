@@ -20,7 +20,8 @@ public class LocationController {
     private final LocationService locationService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LocationResponse> create(@Valid @RequestBody CreateLocationRequest request) {
         return ResponseEntity.ok(locationService.create(request));
     }
@@ -71,7 +72,8 @@ public class LocationController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<LocationResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateLocationRequest request
@@ -80,7 +82,8 @@ public class LocationController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         locationService.delete(id);
         return ResponseEntity.noContent().build();
