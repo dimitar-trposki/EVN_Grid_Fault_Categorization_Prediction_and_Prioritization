@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.CreateLocationRequest;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.UpdateLocationRequest;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.response.LocationResponse;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.exception.ResourceNotFoundException;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.domain.Location;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.domain.Region;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.LocationRepository;
@@ -23,7 +24,7 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationResponse create(CreateLocationRequest request) {
         Region region = regionRepository.findById(request.regionId())
-                .orElseThrow(() -> new RuntimeException("Region not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Region", request.regionId()));
 
         Location location = new Location();
         location.setLatitude(request.latitude());
@@ -36,24 +37,20 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public LocationResponse getById(Long id) {
-        Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
-
-        return map(location);
+        return map(locationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Location", id)));
     }
 
     @Override
     public List<LocationResponse> getAll() {
-        return locationRepository.findAll()
-                .stream()
+        return locationRepository.findAll().stream()
                 .map(this::map)
                 .toList();
     }
 
     @Override
     public List<LocationResponse> getByRegion(Long regionId) {
-        return locationRepository.findAllByRegionId(regionId)
-                .stream()
+        return locationRepository.findAllByRegionId(regionId).stream()
                 .map(this::map)
                 .toList();
     }
@@ -61,10 +58,10 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public LocationResponse update(Long id, UpdateLocationRequest request) {
         Location location = locationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Location", id));
 
         Region region = regionRepository.findById(request.regionId())
-                .orElseThrow(() -> new RuntimeException("Region not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Region", request.regionId()));
 
         location.setLatitude(request.latitude());
         location.setLongitude(request.longitude());
@@ -76,46 +73,42 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public List<LocationResponse> findAllByRegionId(Long regionId) {
-        return locationRepository.findAllByRegionId(regionId)
-                .stream()
+        return locationRepository.findAllByRegionId(regionId).stream()
                 .map(this::map)
                 .toList();
     }
 
     @Override
     public LocationResponse findByAddress(String address) {
-        Location location = locationRepository.findByAddress(address)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
-
-        return map(location);
+        return map(locationRepository.findByAddress(address)
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found with address: " + address)));
     }
 
     @Override
     public List<LocationResponse> findByLongitude(Double longitude) {
-        return locationRepository.findByLongitude(longitude)
-                .stream()
+        return locationRepository.findByLongitude(longitude).stream()
                 .map(this::map)
                 .toList();
     }
 
     @Override
     public List<LocationResponse> findByLatitude(Double latitude) {
-        return locationRepository.findByLatitude(latitude)
-                .stream()
+        return locationRepository.findByLatitude(latitude).stream()
                 .map(this::map)
                 .toList();
     }
 
     @Override
     public LocationResponse findByLongitudeAndLatitude(Double longitude, Double latitude) {
-        Location location = locationRepository.findByLongitudeAndLatitude(longitude, latitude)
-                .orElseThrow(() -> new RuntimeException("Location not found"));
-
-        return map(location);
+        return map(locationRepository.findByLongitudeAndLatitude(longitude, latitude)
+                .orElseThrow(() -> new ResourceNotFoundException("Location not found at given coordinates")));
     }
 
     @Override
     public void delete(Long id) {
+        if (!locationRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Location", id);
+        }
         locationRepository.deleteById(id);
     }
 

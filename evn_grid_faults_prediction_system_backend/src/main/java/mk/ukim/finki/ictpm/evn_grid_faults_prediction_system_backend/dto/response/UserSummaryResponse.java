@@ -1,9 +1,11 @@
 package mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.response;
 
-public record CustomerResponse(
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enums.RoleType;
+
+public record UserSummaryResponse(
         Long id,
         String firstName,
         String lastName,
         String email,
-        String contact
+        RoleType role
 ) {}

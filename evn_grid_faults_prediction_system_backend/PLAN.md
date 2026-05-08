@@ -42,62 +42,60 @@
 > Covers: customer registration/login, internal user login, profile view/update, logout.
 > Partially done: `AuthController`, `UserController`, `UserService/Impl` exist.
 
-- [ ] **Repository custom methods** — `UserRepository`: `findByEmail`, `existsByEmail`; `CustomerRepository`: `findByUserId`
-- [ ] **Request DTOs** — `CustomerRegistrationRequest`, `LoginRequest`, `UpdateProfileRequest` (as `record`s in `dto/request/`)
-- [ ] **Response DTOs** — `LoginResponse` (token + role), `UserProfileResponse`, `UserSummaryResponse` (as `record`s in `dto/response/`)
-- [x] **Service interface** — `UserService` exists
-- [ ] **Service implementation** — `UserServiceImpl` exists but uses `RuntimeException`; needs `ResourceNotFoundException` / `ConflictException`; needs admin user-creation method (create internal users with given role)
-- [ ] **Controller + endpoints** — `AuthController` (`POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/logout`) and `UserController` (`GET/PUT /api/v1/users/profile`; admin: `GET /api/v1/users`, `POST /api/v1/users`, `PUT /api/v1/users/{id}/role`); fix base paths; add `@PreAuthorize`
-- [ ] **Mapper(s)** — `UserMapper` (User → UserProfileResponse, etc.)
-- [ ] **Custom exceptions** — `ResourceNotFoundException`, `BadRequestException`, `UnauthorizedException`, `ConflictException` + `GlobalExceptionHandler` in `exception/`
+- [x] **Repository custom methods** — `UserRepository`: `findByEmail`, `existsByEmail`; `CustomerRepository`: `findByUserId`, `findByUserEmail`, `existsByUserEmail`
+- [x] **Request DTOs** — `RegisterCustomerRequest`, `LoginRequest`, `UpdateProfileRequest`, `RegisterUserRequest`, `UpdateRoleRequest` (as `record`s in `dto/request/`)
+- [x] **Response DTOs** — `LoginResponse` (token + userId + role), `UserProfileResponse`, `UserSummaryResponse` (as `record`s in `dto/response/`)
+- [x] **Service interface** — `UserService` updated with admin methods + new return types
+- [x] **Service implementation** — `UserServiceImpl` rewritten: uses `ResourceNotFoundException`/`ConflictException`/`BadRequestException`; logout fixed (handles JWT exceptions); admin user-creation added
+- [x] **Controller + endpoints** — `AuthController` (`POST /api/auth/register`, `/login`, `/logout` — kept at `/api/auth` to respect security whitelist) and `UserController` (`GET/PUT /api/v1/users/profile`; admin: `GET /api/v1/users`, `POST /api/v1/users`, `GET /api/v1/users/{id}`, `PUT /api/v1/users/{id}/role`); `@PreAuthorize` added
+- [x] **Mapper(s)** — inline `toProfileResponse()` in `UserServiceImpl`
+- [x] **Custom exceptions** — all exist; `GlobalExceptionHandler` covers all custom exceptions + generic handler
 
 ---
 
 ## Module 2 — Customers
 
 > Covers: admin/operator CRUD of customer profiles; customer views own profile.
-> Nothing exists beyond the entity and empty repository.
 
-- [ ] **Repository custom methods** — `CustomerRepository`: `findByUserId`, `findByUserEmail`, `existsByUserEmail`
-- [ ] **Request DTOs** — `UpdateCustomerRequest` (as `record`)
-- [ ] **Response DTOs** — `CustomerResponse` (id, firstName, lastName, email, phone, contact) (as `record`)
-- [ ] **Service interface** — `CustomerService`
-- [ ] **Service implementation** — `CustomerServiceImpl` in `service/impl/`
-- [ ] **Controller + endpoints** — `CustomerController`: `GET /api/v1/customers` (ADMIN/OPERATOR), `GET /api/v1/customers/{id}`, `PUT /api/v1/customers/{id}`, `DELETE /api/v1/customers/{id}`; `GET /api/v1/customers/me` (CUSTOMER)
-- [ ] **Mapper(s)** — `CustomerMapper`
-- [ ] **Custom exceptions** — reuse `ResourceNotFoundException` from Module 1
+- [x] **Repository custom methods** — `CustomerRepository`: `findByUserId`, `findByUserEmail`, `existsByUserEmail`
+- [x] **Request DTOs** — `UpdateCustomerRequest` (record)
+- [x] **Response DTOs** — `CustomerResponse` (id, firstName, lastName, email, contact) (record, no validation annotations)
+- [x] **Service interface** — `CustomerService` (added `delete`)
+- [x] **Service implementation** — `CustomerServiceImpl` fixed: `ResourceNotFoundException`, `delete()` added, user fields saved
+- [x] **Controller + endpoints** — `CustomerController`: `/api/v1/customers` with `@PreAuthorize`; ADMIN/OPERATOR for list/detail/update; CUSTOMER for `/me`; ADMIN for DELETE
+- [x] **Mapper(s)** — inline `mapToResponse()` in `CustomerServiceImpl`
+- [x] **Custom exceptions** — reuses `ResourceNotFoundException`
 
 ---
 
 ## Module 3 — Regions & Locations
 
 > Covers: admin CRUD for regions; admin CRUD for locations (linked to region).
-> Nothing exists beyond entities and empty repositories.
 
-- [ ] **Repository custom methods** — `RegionRepository`: `findByName`, `existsByName`; `LocationRepository`: `findByRegionId`, `findByLatitudeBetweenAndLongitudeBetween`
-- [ ] **Request DTOs** — `RegionRequest`, `LocationRequest` (as `record`s)
-- [ ] **Response DTOs** — `RegionResponse`, `LocationResponse`, `LocationSummaryResponse` (as `record`s)
-- [ ] **Service interface** — `RegionService`, `LocationService`
-- [ ] **Service implementation** — `RegionServiceImpl`, `LocationServiceImpl`
-- [ ] **Controller + endpoints** — `RegionController`: full CRUD at `/api/v1/regions` (ADMIN); `LocationController`: full CRUD at `/api/v1/locations` + `GET /api/v1/regions/{regionId}/locations`
-- [ ] **Mapper(s)** — `RegionMapper`, `LocationMapper`
-- [ ] **Custom exceptions** — reuse; add `ConflictException` for duplicate region names
+- [x] **Repository custom methods** — `RegionRepository`: `findByName`, `existsByName`; `LocationRepository`: `findAllByRegionId`, `findByAddress`, `findByLongitude`, `findByLatitude`, `findByLongitudeAndLatitude`
+- [x] **Request DTOs** — `CreateRegionRequest`, `UpdateRegionRequest`, `CreateLocationRequest`, `UpdateLocationRequest` (records)
+- [x] **Response DTOs** — `RegionResponse`, `LocationResponse` (records)
+- [x] **Service interface** — `RegionService`, `LocationService`
+- [x] **Service implementation** — `RegionServiceImpl` (ResourceNotFoundException, ConflictException for duplicate names), `LocationServiceImpl` (ResourceNotFoundException)
+- [x] **Controller + endpoints** — `RegionController` (`/api/v1/regions`, ADMIN write / authenticated read, `GET /{regionId}/locations`); `LocationController` (`/api/v1/locations`, ADMIN write / authenticated read)
+- [x] **Mapper(s)** — inline in service implementations
+- [x] **Custom exceptions** — `ConflictException` for duplicate region name; reuses `ResourceNotFoundException`
 
 ---
 
 ## Module 4 — Equipment
 
 > Covers: admin CRUD for equipment items; equipment tied to a location and an EquipmentType enum.
-> Nothing exists beyond the entity and empty repository.
 
-- [ ] **Repository custom methods** — `EquipmentRepository`: `findByLocationId`, `findByEquipmentType`, `findByLocationIdAndEquipmentType`
-- [ ] **Request DTOs** — `EquipmentRequest` (name, type, locationId) (as `record`)
-- [ ] **Response DTOs** — `EquipmentResponse`, `EquipmentSummaryResponse` (as `record`s)
-- [ ] **Service interface** — `EquipmentService`
-- [ ] **Service implementation** — `EquipmentServiceImpl`
-- [ ] **Controller + endpoints** — `EquipmentController`: full CRUD at `/api/v1/equipment` (ADMIN); `GET /api/v1/locations/{locationId}/equipment`
-- [ ] **Mapper(s)** — `EquipmentMapper`
-- [ ] **Custom exceptions** — reuse `ResourceNotFoundException`
+- [x] **Repository custom methods** — `EquipmentRepository`: `findByLocationId`, `findByEquipmentType`, `findByLocationIdAndEquipmentType`
+- [x] **Request DTOs** — `EquipmentRequest` (name, equipmentType, locationId) (record)
+- [x] **Response DTOs** — `EquipmentResponse` (full with region info), `EquipmentSummaryResponse` (record)
+- [x] **Service interface** — `EquipmentService`
+- [x] **Service implementation** — `EquipmentServiceImpl`
+- [x] **Controller + endpoints** — `EquipmentController`: full CRUD at `/api/v1/equipment` (ADMIN write / authenticated read); `GET /api/v1/locations/{locationId}/equipment`; `GET /api/v1/equipment/by-type`
+- [x] **Mapper(s)** — inline in service (`mapToResponse`, `mapToSummary`)
+- [x] **Custom exceptions** — reuses `ResourceNotFoundException`
+- [x] **EquipmentType enum** — added values: TRANSFORMER, CABLE, OVERHEAD_LINE, SWITCHGEAR, METER, SUBSTATION, CIRCUIT_BREAKER, FUSE, CAPACITOR_BANK, DISTRIBUTION_BOX
 
 ---
 
@@ -333,10 +331,11 @@
 
 ## Cross-cutting tasks (do before or alongside Module 1)
 
-- [ ] Create `exception/ResourceNotFoundException`, `BadRequestException`, `UnauthorizedException`, `ConflictException`, `AiServiceException`, `ExternalApiException`, `ImportValidationException`
-- [ ] Create `exception/GlobalExceptionHandler` (`@RestControllerAdvice`) — maps each exception to the correct HTTP status + standard error body
-- [ ] Move / convert all existing DTOs to `record` types in `dto/request/` and `dto/response/`
-- [ ] Fix all controller base paths to `/api/v1/...`
+- [x] Create `exception/ResourceNotFoundException`, `BadRequestException`, `UnauthorizedException`, `ConflictException` — done
+- [ ] Create `exception/AiServiceException`, `ExternalApiException`, `ImportValidationException` — deferred to Modules 7/13/16
+- [x] Create `exception/GlobalExceptionHandler` (`@RestControllerAdvice`) — done
+- [x] DTOs as `record` types in `dto/request/` and `dto/response/` — done for Modules 1-4
+- [x] Fix controller base paths to `/api/v1/...` — done (AuthController kept at `/api/auth/` because security config whitelists `/api/auth/**` and cannot be changed)
 - [ ] Add `application.properties` entries: `ai.service.base-url`, `weather.api.base-url`, `weather.api.key`
 - [ ] Create `client/` package with `AiClient` (Module 7) and `WeatherClient` (Module 13)
 
@@ -346,10 +345,10 @@
 
 | # | Module | Status |
 |---|---|---|
-| 1 | Auth & Users | In progress (partial) |
-| 2 | Customers | Not started |
-| 3 | Regions & Locations | Not started |
-| 4 | Equipment | Not started |
+| 1 | Auth & Users | Done ✓ |
+| 2 | Customers | Done ✓ |
+| 3 | Regions & Locations | Done ✓ |
+| 4 | Equipment | Done ✓ |
 | 5 | Fault Reports (core) | In progress (partial) |
 | 6 | Attachments | In progress (partial) |
 | 7 | AI Classification | Not started |

@@ -1,15 +1,21 @@
 package mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.web;
 
 import jakarta.validation.Valid;
-import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.UpdateProfileDto;
-import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.UserProfileDto;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.RegisterUserRequest;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.UpdateProfileRequest;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.UpdateRoleRequest;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.response.UserProfileResponse;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.response.UserSummaryResponse;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,17 +25,44 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserProfileDto> getProfile(Authentication authentication) {
-        UserProfileDto profile = userService.getProfile(authentication.getName());
-        return ResponseEntity.ok(profile);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserProfileResponse> getProfile(Authentication authentication) {
+        return ResponseEntity.ok(userService.getProfile(authentication.getName()));
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserProfileDto> updateProfile(
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserProfileResponse> updateProfile(
             Authentication authentication,
-            @Valid @RequestBody UpdateProfileDto dto
+            @Valid @RequestBody UpdateProfileRequest dto
     ) {
-        UserProfileDto updated = userService.updateProfile(authentication.getName(), dto);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(userService.updateProfile(authentication.getName(), dto));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserSummaryResponse>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserProfileResponse> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserProfileResponse> createInternalUser(@Valid @RequestBody RegisterUserRequest request) {
+        return ResponseEntity.ok(userService.createInternalUser(request));
+    }
+
+    @PutMapping("/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserProfileResponse> updateUserRole(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateRoleRequest request
+    ) {
+        return ResponseEntity.ok(userService.updateUserRole(id, request));
     }
 }

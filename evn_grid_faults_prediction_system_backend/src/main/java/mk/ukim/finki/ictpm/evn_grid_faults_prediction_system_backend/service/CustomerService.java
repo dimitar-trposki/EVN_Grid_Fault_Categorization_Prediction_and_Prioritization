@@ -6,6 +6,7 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.respons
 import java.util.List;
 
 public interface CustomerService {
+
     CustomerResponse getById(Long id);
 
     CustomerResponse getCurrent();
@@ -13,4 +14,6 @@ public interface CustomerService {
     List<CustomerResponse> getAll();
 
     CustomerResponse update(Long id, UpdateCustomerRequest req);
+
+    void delete(Long id);
 }

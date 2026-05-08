@@ -3,9 +3,9 @@ package mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.web;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.constants.JwtConstants;
-import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.CustomerRegistrationDto;
-import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.LoginRequestDto;
-import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.LoginResponseDto;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.LoginRequest;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.request.RegisterCustomerRequest;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.response.LoginResponse;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +21,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<LoginResponseDto> register(@Valid @RequestBody CustomerRegistrationDto dto) {
-        userService.register(dto);
-        LoginResponseDto response = userService.login(dto.getEmail(), dto.getPassword());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<LoginResponse> register(@Valid @RequestBody RegisterCustomerRequest dto) {
+        return ResponseEntity.ok(userService.register(dto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto dto) {
-        LoginResponseDto response = userService.login(dto.getEmail(), dto.getPassword());
-        return ResponseEntity.ok(response);
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest dto) {
+        return ResponseEntity.ok(userService.login(dto.email(), dto.password()));
     }
 
     @PostMapping("/logout")
