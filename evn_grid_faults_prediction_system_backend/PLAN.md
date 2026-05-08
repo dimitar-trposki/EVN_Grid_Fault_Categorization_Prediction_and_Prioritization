@@ -266,16 +266,13 @@
 ## Module 15 — Dashboard & Analytics
 
 > Covers: KPI summary (active faults, avg response time, avg resolution time, critical count), region analytics, fault type analytics, crew performance, map data endpoints.
-> Nothing exists. Pure aggregation — no new entities needed.
 
-- [ ] **Repository custom methods** — Add aggregation queries to existing repositories: `FaultReportRepository` (count by status, count by priority, count by region, avg resolution time); `InterventionRepository` (avg duration, count by crew); `RiskPredictionRepository` (high-risk locations)
-- [ ] **Request DTOs** — `AnalyticsFilterRequest` (regionId, faultType, dateFrom, dateTo, period) (as `record`)
-- [ ] **Response DTOs** — `DashboardSummaryResponse`, `RegionAnalyticsResponse`, `FaultTypeAnalyticsResponse`, `CrewPerformanceResponse`, `MapFaultResponse` (lat, lon, priority, status), `KpiResponse` (as `record`s)
-- [ ] **Service interface** — `DashboardService`: `getSummary()`, `getMapFaults()`, `getRegionAnalytics(AnalyticsFilterRequest)`, `getFaultTypeAnalytics(AnalyticsFilterRequest)`, `getCrewPerformance()`, `getKpis()`
-- [ ] **Service implementation** — `DashboardServiceImpl`: query multiple repositories, compute aggregates in Java (no new SQL entities)
-- [ ] **Controller + endpoints** — `DashboardController`: `GET /api/v1/dashboard/summary`, `GET /api/v1/dashboard/map`, `GET /api/v1/analytics/regions`, `GET /api/v1/analytics/fault-types`, `GET /api/v1/analytics/crews`, `GET /api/v1/analytics/kpis`; `@PreAuthorize(OPERATOR, DISPATCHER, MANAGER, ADMIN)`
-- [ ] **Mapper(s)** — no dedicated mapper; projections built inline in service
-- [ ] **Custom exceptions** — none needed
+- [x] **Repository custom methods** — `FaultReportRepository`: countActiveFaults, countCriticalActiveFaults, countFaultsToday, avgResponseTimeMinutes, avgResolutionTimeMinutes, countByRegion, countByFaultType, findActiveFaultsForMap, countByPeriodDay/Week/Month (all native SQL via FaultStatusHistory joins). `InterventionRepository`: countByCrew. `RiskPredictionRepository`: findTopRiskZonesWithLocation (JOIN FETCH). `FaultAssigmentRepository`: countDistinctActiveCrews, findActiveCrewIds.
+- [x] **Response DTOs** — `DashboardKpiResponse`, `FaultsByRegionResponse`, `FaultsByTypeResponse`, `FaultsByPeriodResponse`, `CrewPerformanceResponse`, `MapFaultResponse`, `MapRiskZoneResponse`, `MapCrewLocationResponse` (all records in `dto/response/dashboard/`)
+- [x] **Service interface** — `DashboardService`: getKpis, getFaultsByRegion, getFaultsByType, getFaultsByPeriod(groupBy, from, to), getCrewPerformance, getActiveFaultsForMap, getRiskZonesForMap, getCrewsForMap
+- [x] **Service implementation** — `DashboardServiceImpl`: @Transactional(readOnly=true), all queries delegated to repositories; groupBy dispatch in getFaultsByPeriod; BadRequestException for invalid groupBy or date range
+- [x] **Controller + endpoints** — `DashboardController` at `/api/v1/dashboard`: GET /kpis, /faults-by-region, /faults-by-type, /faults-by-period?groupBy&from&to, /crew-performance, /map/faults, /map/risk-zones, /map/crews; @PreAuthorize per role
+- [x] **Limitations noted** — `Intervention` has no timestamp fields → avgDurationMin/efficiencyPercent return 0.0. `Crew` has no coordinates → MapCrewLocationResponse lat/lon are null. Active status derived from FaultStatusHistory (latest entry). RiskPrediction.probability used as riskScore; riskLevel derived from thresholds (>0.7=HIGH, >0.4=MEDIUM, else LOW).
 
 ---
 
@@ -359,7 +356,7 @@
 | 12 | Interventions | In progress (partial) |
 | 13 | Weather Integration | Not started |
 | 14 | Notifications | In progress (partial) |
-| 15 | Dashboard & Analytics | Not started |
+| 15 | Dashboard & Analytics | Done ✓ |
 | 16 | Import | Done ✓ |
 | 17 | Export | Done ✓ |
 | 18 | Audit Log | In progress (partial) |
