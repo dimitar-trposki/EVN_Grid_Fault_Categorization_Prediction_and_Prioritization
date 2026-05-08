@@ -1,0 +1,7 @@
+metric,value
+totalFaults,10
+totalInterventions,0
+faults_LOW,1
+faults_CRITICAL,2
+faults_MEDIUM,4
+faults_HIGH,3

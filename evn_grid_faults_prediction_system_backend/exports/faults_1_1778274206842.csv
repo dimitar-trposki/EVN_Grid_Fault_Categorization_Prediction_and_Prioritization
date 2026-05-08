@@ -1,0 +1,11 @@
+id,title,description,faultPriority,faultClassification,locationId,locationAddress
+1,Power outage in central area,Complete loss of power affecting multiple buildings on Partizanski Odredi street,HIGH,ELECTRICAL,1,"Bul. Partizanski Odredi 50, Skopje"
+2,Voltage fluctuation reported,Customer reports lights flickering and appliances cycling on and off,MEDIUM,ELECTRICAL,2,"Ul. Vasil Gjorgov 15, Skopje"
+3,Short circuit in cable,Underground cable insulation breakdown causing short,CRITICAL,ELECTRICAL,3,"Ul. Mito Hadzivasilev 20, Skopje"
+4,Transformer overload,Transformer running above rated capacity during peak hours,HIGH,MECHANICAL,4,"Ul. Marshal Tito 22, Bitola"
+5,SCADA system unresponsive,Monitoring software not receiving telemetry from substation sensors,MEDIUM,SOFTWARE,5,"Ul. Sirok Sokak 5, Bitola"
+6,Ground fault detected,Ground fault relay triggered on feeder line,HIGH,ELECTRICAL,6,"Ul. Boris Kidric 5, Veles"
+7,Frequent breaker trips,Circuit breaker trips multiple times per day in residential block,MEDIUM,ELECTRICAL,7,"Ul. Goce Delcev 8, Kumanovo"
+8,Insulator failure on overhead line,Cracked insulator causing arcing and partial discharge,MEDIUM,MECHANICAL,8,"Ul. 11 Oktomvri 14, Kumanovo"
+9,Pole leaning after vehicle accident,Utility pole damaged by car collision needs urgent inspection,CRITICAL,OTHER,9,"Ul. Marshal Tito 100, Stip"
+10,Smart meter offline,Meter stopped reporting after recent firmware push,LOW,SOFTWARE,10,"Ul. Egejska 12, Strumica"

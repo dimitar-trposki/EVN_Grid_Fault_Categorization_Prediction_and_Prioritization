@@ -284,14 +284,14 @@
 > Covers: upload CSV/Excel file of faults, locations, or equipment; validate; persist; track in `ImportBatch`.
 > `ImportBatch` entity + `ImportBatchRepository` (empty) exist. No service or controller.
 
-- [ ] **Repository custom methods** — `ImportBatchRepository`: `findByCreatedByUserId`, `findByImportStatus`
-- [ ] **Request DTOs** — none (uses `MultipartFile` + `@RequestParam type`)
-- [ ] **Response DTOs** — `ImportBatchResponse` (id, fileName, totalRecords, successfulRecords, failedRecords, status, createdAt, errors list) (as `record`)
-- [ ] **Service interface** — `ImportService`: `importFaults(MultipartFile, Long userId)`, `importLocations(MultipartFile, Long userId)`, `importEquipment(MultipartFile, Long userId)`, `getBatchStatus(Long batchId)`
-- [ ] **Service implementation** — `ImportServiceImpl`: detect CSV vs XLSX, use Apache POI for Excel, validate each row, persist valid rows, accumulate errors, save `ImportBatch` with counts
-- [ ] **Controller + endpoints** — `ImportController`: `POST /api/v1/import/faults`, `POST /api/v1/import/locations`, `POST /api/v1/import/equipment`, `GET /api/v1/import/{batchId}`; `@PreAuthorize(ADMIN, OPERATOR)`
-- [ ] **Mapper(s)** — row-to-entity mapping logic inside service (no separate mapper class)
-- [ ] **Custom exceptions** — `BadRequestException` (unsupported file format, empty file); `ImportValidationException` for row-level errors (collected, not thrown)
+- [x] **Repository custom methods** — `ImportBatchRepository`: `findByCreatedByUserId`, `findByImportStatus`
+- [x] **Request DTOs** — none (uses `MultipartFile` + `@RequestParam type`)
+- [x] **Response DTOs** — `ImportBatchResponse` (id, fileName, fileType, totalRecords, successfulRecords, failedRecords, status, createdAt, errors list) (as `record`)
+- [x] **Service interface** — `ImportService`: `importFaults(MultipartFile, Long userId)`, `importLocations(MultipartFile, Long userId)`, `importEquipment(MultipartFile, Long userId)`, `getBatchStatus(Long batchId)`
+- [x] **Service implementation** — `ImportServiceImpl`: detect CSV vs XLSX, use Apache POI for Excel, validate each row, persist valid rows, accumulate errors, save `ImportBatch` with counts
+- [x] **Controller + endpoints** — `ImportController`: `POST /api/v1/import/faults`, `POST /api/v1/import/locations`, `POST /api/v1/import/equipment`, `GET /api/v1/import/{batchId}`; `@PreAuthorize(ADMIN, OPERATOR)`
+- [x] **Mapper(s)** — row-to-entity mapping logic inside service (no separate mapper class)
+- [x] **Custom exceptions** — `BadRequestException` (unsupported file format, empty file); row-level errors collected into list (not thrown)
 
 ---
 
@@ -300,14 +300,14 @@
 > Covers: export fault list, interventions, analytics to CSV or Excel file download.
 > `ExportBatch` entity + `ExportBatchRepository` (empty) exist. No service or controller.
 
-- [ ] **Repository custom methods** — `ExportBatchRepository`: `findByCreatedByUserId`, `findByExportStatus`
-- [ ] **Request DTOs** — `ExportRequest` (type: FAULTS/INTERVENTIONS/ANALYTICS, format: CSV/XLSX, filters) (as `record`)
-- [ ] **Response DTOs** — `ExportBatchResponse` (id, type, format, status, downloadUrl, createdAt) (as `record`); actual file returned as `ResponseEntity<Resource>`
-- [ ] **Service interface** — `ExportService`: `exportFaults(ExportRequest, Long userId)`, `exportInterventions(ExportRequest, Long userId)`, `exportAnalytics(ExportRequest, Long userId)`, `getFile(Long batchId)`
-- [ ] **Service implementation** — `ExportServiceImpl`: query data, use Apache POI for XLSX / built-in for CSV, write to temp file, record in `ExportBatch`
-- [ ] **Controller + endpoints** — `ExportController`: `POST /api/v1/export/faults`, `POST /api/v1/export/interventions`, `POST /api/v1/export/analytics`, `GET /api/v1/export/{batchId}/download`; `@PreAuthorize(MANAGER, ADMIN, DISPATCHER)`
-- [ ] **Mapper(s)** — none; data fetched and written inline in service
-- [ ] **Custom exceptions** — `ResourceNotFoundException` (batch not found or file missing); `BadRequestException` (invalid export type)
+- [x] **Repository custom methods** — `ExportBatchRepository`: `findByCreatedByUserId`, `findByExportStatus`
+- [x] **Request DTOs** — `ExportRequest` (type: FAULTS/INTERVENTIONS/ANALYTICS, format: CSV/XLSX, filters) (as `record`)
+- [x] **Response DTOs** — `ExportBatchResponse` (id, type, format, status, downloadUrl, createdAt) (as `record`); actual file returned as `ResponseEntity<Resource>`
+- [x] **Service interface** — `ExportService`: `exportFaults(ExportRequest, Long userId)`, `exportInterventions(ExportRequest, Long userId)`, `exportAnalytics(ExportRequest, Long userId)`, `getFile(Long batchId, User requestingUser)`
+- [x] **Service implementation** — `ExportServiceImpl`: query data, use Apache POI for XLSX / Apache Commons CSV for CSV, write to configured storage path, record in `ExportBatch`
+- [x] **Controller + endpoints** — `ExportController`: `POST /api/v1/export/faults`, `POST /api/v1/export/interventions`, `POST /api/v1/export/analytics`, `GET /api/v1/export/{batchId}/download`; `@PreAuthorize(MANAGER, ADMIN, DISPATCHER)`
+- [x] **Mapper(s)** — none; data fetched and written inline in service
+- [x] **Custom exceptions** — `ResourceNotFoundException` (batch not found or file missing); `BadRequestException` (invalid export type)
 
 ---
 
@@ -360,6 +360,6 @@
 | 13 | Weather Integration | Not started |
 | 14 | Notifications | In progress (partial) |
 | 15 | Dashboard & Analytics | Not started |
-| 16 | Import | Not started |
-| 17 | Export | Not started |
+| 16 | Import | Done ✓ |
+| 17 | Export | Done ✓ |
 | 18 | Audit Log | In progress (partial) |
