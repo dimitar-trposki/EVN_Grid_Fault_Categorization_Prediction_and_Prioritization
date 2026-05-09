@@ -302,19 +302,19 @@
 > Covers: fetch weather data from external API per location, store in `WeatherData`, use in risk prediction.
 > `WeatherData` entity + `WeatherDataRepository` (empty) exist. No service or client.
 
-- [x] **Repository custom methods** — `WeatherDataRepository`: `findLatestByLocationId`,
+- [ ] **Repository custom methods** — `WeatherDataRepository`: `findLatestByLocationId`,
   `findByLocationIdAndRecordedAtBetween`
-- [x] **Request DTOs** — `WeatherFetchRequest` (locationId) (as `record`)
-- [x] **Response DTOs** — `WeatherDataResponse` (temperature, windSpeed, humidity, precipitation, condition,
+- [ ] **Request DTOs** — `WeatherFetchRequest` (locationId) (as `record`)
+- [ ] **Response DTOs** — `WeatherDataResponse` (temperature, windSpeed, humidity, precipitation, condition,
   recordedAt) (as `record`)
-- [x] **Service interface** — `WeatherService`: `fetchAndStore(Long locationId)`, `getLatest(Long locationId)`,
+- [ ] **Service interface** — `WeatherService`: `fetchAndStore(Long locationId)`, `getLatest(Long locationId)`,
   `getHistory(Long locationId, LocalDateTime from, LocalDateTime to)`
-- [x] **Service implementation** — `WeatherServiceImpl`: calls `WeatherClient` (WebClient, URL from
+- [ ] **Service implementation** — `WeatherServiceImpl`: calls `WeatherClient` (WebClient, URL from
   `weather.api.base-url` + `weather.api.key`), maps response to `WeatherData`, saves
-- [x] **Controller + endpoints** — `WeatherController`: `POST /api/v1/weather/fetch` (ADMIN/OPERATOR),
+- [ ] **Controller + endpoints** — `WeatherController`: `POST /api/v1/weather/fetch` (ADMIN/OPERATOR),
   `GET /api/v1/locations/{id}/weather`, `GET /api/v1/locations/{id}/weather/history`
-- [x] **Mapper(s)** — `WeatherDataMapper`
-- [x] **Custom exceptions** — `ExternalApiException` (weather API unreachable); reuse `ResourceNotFoundException`
+- [ ] **Mapper(s)** — `WeatherDataMapper`
+- [ ] **Custom exceptions** — `ExternalApiException` (weather API unreachable); reuse `ResourceNotFoundException`
 
 > **Also create:** `client/WeatherClient` using `WebClient`, configured via `application.properties`.
 
@@ -470,7 +470,7 @@
 | 10 | Crews & Crew Members  | In progress (partial) |
 | 11 | Fault Assignment      | In progress (partial) |
 | 12 | Interventions         | In progress (partial) |
-| 13 | Weather Integration   | Done ✓                |
+| 13 | Weather Integration   | Not started           |
 | 14 | Notifications         | In progress (partial) |
 | 15 | Dashboard & Analytics | Done ✓                |
 | 16 | Import                | Done ✓                |
