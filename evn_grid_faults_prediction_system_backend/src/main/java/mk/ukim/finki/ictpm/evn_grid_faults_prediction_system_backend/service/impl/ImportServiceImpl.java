@@ -191,6 +191,7 @@ public class ImportServiceImpl implements ImportService {
         fault.setFaultType(faultType);
         fault.setFaultPriority(priority);
         fault.setFaultClassification(classification);
+        fault.setSourceType(FaultSourceType.IMPORTED);
         FaultReport saved = faultReportRepository.save(fault);
 
         FaultStatusHistory history = new FaultStatusHistory();

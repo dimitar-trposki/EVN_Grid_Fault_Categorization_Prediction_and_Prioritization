@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,6 +25,29 @@ public class Attachment {
 
     @Column(nullable = false)
     private String filePath;
+
+    @Column(nullable = false, length = 100)
+    private String fileType;
+
+    @Column(nullable = false)
+    private Long fileSize;
+
+    @Column(nullable = false)
+    private LocalDateTime uploadedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "uploaded_by_user_id",
+            foreignKey = @ForeignKey(name = "fk_attachment_uploaded_by_user")
+    )
+    private User uploadedByUser;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "uploaded_by_customer_id",
+            foreignKey = @ForeignKey(name = "fk_attachment_uploaded_by_customer")
+    )
+    private Customer uploadedByCustomer;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(

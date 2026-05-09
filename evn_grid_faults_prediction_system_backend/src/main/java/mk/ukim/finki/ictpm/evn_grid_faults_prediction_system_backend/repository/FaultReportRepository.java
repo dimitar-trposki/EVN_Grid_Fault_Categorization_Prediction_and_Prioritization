@@ -2,15 +2,21 @@ package mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository
 
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.domain.FaultReport;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface FaultReportRepository extends JpaRepository<FaultReport, Long> {
+public interface FaultReportRepository extends JpaRepository<FaultReport, Long>, JpaSpecificationExecutor<FaultReport> {
+
+    Optional<FaultReport> findByTrackingCode(String trackingCode);
+
+    boolean existsByTrackingCode(String trackingCode);
 
     // Used by RiskPredictionService to assess fault frequency at a location
     long countByLocationId(Long locationId);

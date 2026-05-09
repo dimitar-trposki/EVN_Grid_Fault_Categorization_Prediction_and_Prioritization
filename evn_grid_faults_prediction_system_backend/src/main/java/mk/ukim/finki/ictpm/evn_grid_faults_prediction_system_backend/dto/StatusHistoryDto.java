@@ -7,6 +7,7 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enums
 
 import java.time.LocalDateTime;
 
+@Deprecated
 @Getter
 @Setter
 @AllArgsConstructor

@@ -120,43 +120,79 @@
 ## Module 5 — Fault Reports (core)
 
 > Covers: submit fault (customer + operator), list/filter/search, detail view, status update, status history.
-> Partially done: `FaultReportService/Impl`, `FaultWorkflowService/Impl`, `FaultController` exist but are incomplete.
 
-- [ ] **Repository custom methods** — `FaultReportRepository` must extend `JpaSpecificationExecutor<FaultReport>`; add
-  `findByTrackingCode`; `FaultStatusHistoryRepository`: `findByFaultReportIdOrderByChangedAtDesc`
-- [ ] **Request DTOs** — `CreateFaultRequest` (trackingCode auto-generated), `UpdateFaultRequest`,
-  `ChangeStatusRequest`, `FaultFilterRequest` (status, priority, regionId, locationId, faultType, dateFrom, dateTo,
-  source) (as `record`s)
-- [ ] **Response DTOs** — `FaultReportResponse` (full), `FaultReportSummaryResponse` (for paginated list),
-  `StatusHistoryResponse` (as `record`s)
-- [ ] **Service interface** — `FaultReportService`: extend with `getFiltered(FaultFilterRequest, Pageable)`,
-  `getStatusHistory(Long)`, `getByTrackingCode(String)`, `createByOperator(...)`
-- [ ] **Service implementation** — fix `FaultReportServiceImpl`: custom exceptions, tracking code via `UUID`, proper
-  mapping; complete `FaultWorkflowServiceImpl`
-- [ ] **Controller + endpoints** — fix `FaultController` to `/api/v1/faults`; add `GET /api/v1/faults` (paginated +
-  filtered), `GET /api/v1/faults/{id}/history`, `GET /api/v1/faults/track/{code}`; add `@PreAuthorize`; add
-  `GET /api/v1/faults/my` for CUSTOMER
-- [ ] **Mapper(s)** — `FaultReportMapper`, `FaultStatusHistoryMapper`
-- [ ] **Custom exceptions** — reuse; no new ones needed
+- [x] **Entity changes** — `FaultReport`: added `trackingCode` (unique index, `FLT-YYYYMMDD-XXXXX` format),
+  `reportedAt`, `sourceType` (`FaultSourceType` enum: CUSTOMER_PORTAL / OPERATOR_CALL_CENTER / IMPORTED); `@PrePersist`
+  sets defaults (protects `ImportServiceImpl` from breaking). `FaultStatusHistory`: added `note`, `customerVisible`,
+  `changedBy` (User), `changedByCustomer`. `FaultSourceType` enum created.
+- [x] **Repository custom methods** — `FaultReportRepository` extended with `JpaSpecificationExecutor<FaultReport>`,
+  `findByTrackingCode(String)`, `existsByTrackingCode(String)`;
+  `FaultStatusHistoryRepository`: `findByFaultReportIdOrderByChangedAtDesc(Long)`;
+  `AttachmentRepository`: `existsByIdAndFaultReportId(Long, Long)` (used by Module 6)
+- [x] **Request DTOs** — `CreateFaultReportRequest` (CUSTOMER: title, description, locationId, faultType),
+  `OperatorCreateFaultRequest` (+ optional customerId), `UpdateFaultReportRequest`, `FaultStatusUpdateRequest`
+  (status, note, customerVisible) — all records
+- [x] **Response DTOs** — `FaultReportResponse` (full, 15 fields), `FaultReportSummaryResponse` (paginated list),
+  `FaultStatusHistoryResponse` (id, faultStatus, changedAt, note, customerVisible, changedByName),
+  `TrackFaultResponse` (tracking code lookup: filters to customerVisible=true history) — all records
+- [x] **Utility** — `util/TrackingCodeGenerator` — generates `FLT-YYYYMMDD-XXXXX`, 5-retry uniqueness check via
+  `existsByTrackingCode`; `@PrePersist` on `FaultReport` provides UUID-based fallback for direct-entity paths
+  (ImportServiceImpl)
+- [x] **Specification** — `specification/FaultSpecification` — 8 static factory methods: hasFaultType,
+  hasFaultPriority, hasFaultClassification, hasLocationId, hasRegionId, hasCustomerId, reportedAfter, reportedBefore,
+  hasCurrentStatus (correlated subquery on FaultStatusHistory to find latest status per fault)
+- [x] **Service interface** — `FaultReportService`: old 4 methods kept but `@Deprecated`; added `createByCustomer`,
+  `createByOperator`, `getFiltered(... Pageable) → Page<FaultReportSummaryResponse>`, `getMyFaults`,
+  `getFaultById`, `getByTrackingCode`, `updateFault`, `updateStatus`, `getStatusHistory`, `delete`
+- [x] **Service implementation** — `FaultReportServiceImpl` rewritten: all 4 `RuntimeException("Not found")` replaced
+  with `ResourceNotFoundException`; `@Transactional` on class; new constructor injects UserRepository,
+  FaultStatusHistoryRepository, FaultReportMapper, FaultStatusHistoryMapper, TrackingCodeGenerator;
+  `buildFault()` private helper shared by all creation paths; AI lifecycle (`runAiLifecycle`) unchanged
+- [x] **Workflow service** — `FaultWorkflowService/Impl`: added 6-arg `changeStatus(fault, status, changedBy,
+  changedByCustomer, note, customerVisible)`; old 2-arg delegates to it (existing callers unaffected)
+- [x] **Controller + endpoints** — `FaultController` at `/api/v1/faults` with 10 endpoints:
+  `POST /` (CUSTOMER), `POST /operator` (OPERATOR/ADMIN/MANAGER),
+  `GET /` (paginated + filtered, ADMIN/OPERATOR/MANAGER/DISPATCHER),
+  `GET /my` (CUSTOMER), `GET /track/{code}` (authenticated), `GET /{id}` (authenticated),
+  `PUT /{id}` (ADMIN/OPERATOR), `PATCH /{id}/status` (authenticated), `GET /{id}/history` (authenticated),
+  `DELETE /{id}` (ADMIN)
+- [x] **Mapper(s)** — `FaultReportMapper` (toResponse, toSummaryResponse), `FaultStatusHistoryMapper` (toResponse)
+- [x] **Migration** — auto-DDL (`ddl-auto=create-drop`) + Flyway disabled; no migration scripts needed for dev/H2.
+  `ImportServiceImpl` patched with `fault.setSourceType(FaultSourceType.IMPORTED)` (minimal fix, no structural change).
+  Old DTOs (`CreateFaultReportDto`, `ChangeStatusDto`, `FaultReportResponseDto`, `StatusHistoryDto`) marked `@Deprecated`.
 
 ---
 
 ## Module 6 — Attachments
 
 > Covers: upload file(s) to a fault report, download attachment, list attachments per fault.
-> Partially done: `AttachmentService/Impl`, `AttachmentController` exist.
 
-- [ ] **Repository custom methods** — `AttachmentRepository`: `findByFaultReportId`, `existsByIdAndFaultReportId`
-- [ ] **Request DTOs** — none (uses `MultipartFile`); `AttachmentMetadataRequest` if needed
-- [ ] **Response DTOs** — `AttachmentResponse` (id, fileName, fileType, fileSize, uploadedAt, uploadedBy) (as `record`)
-- [ ] **Service interface** — `AttachmentService`: `upload(Long faultId, MultipartFile file, Long userId)`,
-  `download(Long attachmentId)`, `listByFault(Long faultId)`, `delete(Long id)`
-- [ ] **Service implementation** — complete `AttachmentServiceImpl`: store files on disk / local path, set entity
-  fields, link to fault and user
-- [ ] **Controller + endpoints** — fix `AttachmentController` to `/api/v1/faults/{faultId}/attachments`; `POST` (
-  upload), `GET` (list), `GET /{id}/download`, `DELETE /{id}`; `@PreAuthorize`
-- [ ] **Mapper(s)** — `AttachmentMapper`
-- [ ] **Custom exceptions** — `BadRequestException` for invalid file type/size; reuse `ResourceNotFoundException`
+- [x] **Entity changes** — `Attachment`: added `fileType` (MIME, not null), `fileSize` (bytes, not null), `uploadedAt`
+  (not null), `uploadedByUser` (ManyToOne User, nullable lazy), `uploadedByCustomer` (ManyToOne Customer, nullable lazy);
+  enforced in service (exactly one non-null per upload)
+- [x] **Repository custom methods** — `AttachmentRepository`: `findByFaultReportId` (existed), `existsByIdAndFaultReportId`
+  (new — used for ownership check in download/delete)
+- [x] **Request DTOs** — none (uses `MultipartFile` + `@AuthenticationPrincipal`)
+- [x] **Response DTOs** — `AttachmentResponse` (id, fileName, fileType, fileSize, uploadedAt) (record)
+- [x] **Service interface** — `AttachmentService`: old 3 methods kept but `@Deprecated`; added
+  `upload(Long, MultipartFile, String callerEmail) → AttachmentResponse`,
+  `listAttachments(Long faultId) → List<AttachmentResponse>`,
+  `download(Long faultId, Long attachmentId, String callerEmail) → Resource`,
+  `delete(Long faultId, Long attachmentId)`
+- [x] **Service implementation** — `AttachmentServiceImpl` rewritten with `@RequiredArgsConstructor`:
+  validates MIME type against `app.attachments.allowed-types`, validates size against `app.attachments.max-size-bytes`;
+  writes to `app.attachments.storage-path` with UUID-based stored filename; sets all entity fields;
+  download returns `FileSystemResource`; delete removes physical file via `Files.deleteIfExists` then DB row;
+  old legacy `upload()` sets `filePath="legacy-upload"` to satisfy NOT NULL constraint without real disk write
+- [x] **Controller + endpoints** — `AttachmentController` at `/api/v1/faults/{faultId}/attachments`:
+  `POST /` (upload, authenticated), `GET /` (list, authenticated),
+  `GET /{attachmentId}/download` (authenticated), `DELETE /{attachmentId}` (authenticated)
+- [x] **Mapper(s)** — `helpers/AttachmentMapper` (`@Component`)
+- [x] **Config** — `application.properties`: `app.attachments.storage-path=./uploads/attachments`,
+  `app.attachments.max-size-bytes=10485760`, `app.attachments.allowed-types=image/jpeg,image/png,image/jpg,application/pdf`
+- [x] **gitignore** — `/uploads/` added
+- [x] **Custom exceptions** — `BadRequestException` for invalid file type/size; `ResourceNotFoundException` for missing
+  fault/attachment; `AttachmentDto` marked `@Deprecated`
 
 ---
 
@@ -516,8 +552,8 @@
 | 2  | Customers             | Done ✓                |
 | 3  | Regions & Locations   | Done ✓                |
 | 4  | Equipment             | Done ✓                |
-| 5  | Fault Reports (core)  | In progress (partial) |
-| 6  | Attachments           | In progress (partial) |
+| 5  | Fault Reports (core)  | Done ✓                |
+| 6  | Attachments           | Done ✓                |
 | 7  | AI Classification     | Done ✓                |
 | 8  | Risk Prediction       | Done ✓                |
 | 9  | Priority Scoring      | Done ✓                |

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface FaultStatusHistoryRepository extends JpaRepository<FaultStatusHistory,Long> {
     List<FaultStatusHistory> findByFaultReportId(Long faultId);
+    List<FaultStatusHistory> findByFaultReportIdOrderByChangedAtDesc(Long faultReportId);
 }
