@@ -32,4 +32,14 @@ public class CrewMember {
     )
     private Crew crew;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "user_id",
+            foreignKey = @ForeignKey(name = "fk_crew_member_user")
+    )
+    private User user;
+
+    @Column(name = "position", length = 80)
+    private String position;
+
 }
