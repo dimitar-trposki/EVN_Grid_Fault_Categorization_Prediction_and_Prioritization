@@ -163,24 +163,34 @@
 ## Module 7 — AI Classification
 
 > Covers: POST fault description to Python AI service, store result, display to operators, allow manual override.
-> Nothing exists beyond `FaultClassification` enum; no `client/` package exists yet.
 
-- [ ] **Repository custom methods** — No dedicated repo needed (classification is stored on `FaultReport`); query via
-  `FaultReportRepository`
-- [ ] **Request DTOs** — `ClassificationRequest` (faultId, description sent to AI), `ManualClassificationRequest` (
-  override by operator) (as `record`s)
-- [ ] **Response DTOs** — `ClassificationResponse` (category, severity, confidence, keywords, safetyRisk) (as `record`)
-- [ ] **Service interface** — `ClassificationService`: `classifyFault(Long faultId)`,
-  `overrideClassification(Long faultId, ManualClassificationRequest)`
-- [ ] **Service implementation** — `ClassificationServiceImpl`: calls `AiClient.classify()`, stores result on
-  `FaultReport`, falls back gracefully if AI unreachable
-- [ ] **Controller + endpoints** — `ClassificationController`: `POST /api/v1/faults/{id}/classify` (OPERATOR,
-  DISPATCHER), `PUT /api/v1/faults/{id}/classification` (manual override)
-- [ ] **Mapper(s)** — `ClassificationMapper` (AI response → entity fields / response DTO)
-- [ ] **Custom exceptions** — `AiServiceException` (wraps unreachable AI, logged + default applied)
+- [x] **Entity** — `FaultClassificationResult` (separate table; `FaultClassification` enum kept untouched as category
+  type). Keywords stored via `@ElementCollection` in `fault_classification_result_keywords` join table
+  (`keyword VARCHAR(100)`). `isFallback` / `nlpProcessed` flags persisted so fallback rows can be re-queued.
+- [x] **Repository** — `FaultClassificationResultRepository`: `findByFaultReportId`, `findByPredictedFaultCategory`,
+  `findByNlpProcessed`
+- [x] **Request DTOs** — `ManualClassificationOverrideRequest` (predictedFaultCategory, predictedSeverity, safetyRisk,
+  extractedKeywords) (record)
+- [x] **Response DTOs** — `ClassificationResponse` (id, faultReportId, predictedFaultCategory, predictedSeverity,
+  classificationConfidence, nlpProcessed, extractedKeywords, classifiedAt, isFallback) (record)
+- [x] **Mapper** — `helpers/FaultClassificationResultMapper` (`@Component`)
+- [x] **Service interface** — `FaultClassificationService`: `classifyFault`, `reclassify`, `getByFault`,
+  `manualOverride`
+- [x] **Service implementation** — `FaultClassificationServiceImpl`: `classifyFault` skips re-call if
+  `nlpProcessed=true`; `reclassify` always re-runs; AI category validated against `FaultClassification` enum (warns,
+  stores raw string); `manualOverride` sets `nlpProcessed=true`, `isFallback=false`; async TODO noted
+- [x] **Controller** — `FaultClassificationController` at `/api/v1/faults/{faultId}/classification`:
+  `POST /classify` (DISPATCHER/OPERATOR/ADMIN), `POST /reclassify` (same roles), `GET /` (authenticated),
+  `PUT /override` (DISPATCHER/ADMIN)
+- [x] **Lifecycle wiring** — `FaultReportServiceImpl.createFault()` calls `classifyFault()` after `faultRepo.save()`;
+  wrapped in try/catch so classification failure never blocks fault creation; logs warning on failure
+- [x] **Shared AI infrastructure** — `client/ai/AiClient` + 6 DTOs in `client/ai/dto/` + `AiHealthCheckService`
+  (built as Module 7 prerequisite); uses `RestClient` + `SimpleClientHttpRequestFactory` for timeout;
+  graceful fallbacks on all three methods
 
-> **Also create in this module:** `client/AiClient` (using `WebClient`, configured via `ai.service.base-url` in
-`application.properties`), covering all three AI endpoints (`/classify`, `/predict-risk`, `/calculate-priority`).
+> **Note:** `predictedFaultCategory` stored as raw `String` (AI value); validated against `FaultClassification` enum
+> but never rejected — unrecognized categories are logged as warnings. `nlpProcessed=false` marks fallback rows for
+> future re-run via `reclassify` endpoint.
 
 ---
 
@@ -478,7 +488,7 @@
 | 4  | Equipment             | Done ✓                |
 | 5  | Fault Reports (core)  | In progress (partial) |
 | 6  | Attachments           | In progress (partial) |
-| 7  | AI Classification     | Not started           |
+| 7  | AI Classification     | Done ✓                |
 | 8  | Risk Prediction       | Not started           |
 | 9  | Priority Scoring      | Not started           |
 | 10 | Crews & Crew Members  | In progress (partial) |
