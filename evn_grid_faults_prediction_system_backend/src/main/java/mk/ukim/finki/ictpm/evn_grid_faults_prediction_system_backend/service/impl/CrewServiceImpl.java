@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class CrewServiceImpl implements CrewService {
 
-    private final CrewRepository crewRepo;
+    private final CrewRepository crewRepository;
     private final FaultReportRepository faultRepo;
     private final FaultAssigmentRepository assignmentRepo;
     private final FaultWorkflowService workflowService;
@@ -41,14 +41,14 @@ public class CrewServiceImpl implements CrewService {
     private final UserRepository userRepository;
     private final CrewMapper crewMapper;
 
-    public CrewServiceImpl(CrewRepository crewRepo,
+    public CrewServiceImpl(CrewRepository crewRepository,
                            FaultReportRepository faultRepo,
                            FaultAssigmentRepository assignmentRepo,
                            FaultWorkflowService workflowService,
                            CrewMemberRepository crewMemberRepository,
                            UserRepository userRepository,
                            CrewMapper crewMapper) {
-        this.crewRepo = crewRepo;
+        this.crewRepository = crewRepository;
         this.faultRepo = faultRepo;
         this.assignmentRepo = assignmentRepo;
         this.workflowService = workflowService;
@@ -59,7 +59,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     public List<CrewResponseDto> getAll() {
-        return crewRepo.findAll().stream()
+        return crewRepository.findAll().stream()
                 .map(c -> new CrewResponseDto(
                         c.getId(),
                         c.getName(),
@@ -70,7 +70,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     public CrewResponseDto getById(Long id) {
-        Crew crew = crewRepo.findById(id)
+        Crew crew = crewRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Crew not found: " + id));
         return new CrewResponseDto(crew.getId(), crew.getName(), crew.getCrewMembers().size());
     }
@@ -79,7 +79,7 @@ public class CrewServiceImpl implements CrewService {
     public CrewResponseDto assignToFault(Long faultId, Long crewId) {
         FaultReport fault = faultRepo.findById(faultId)
                 .orElseThrow(() -> new RuntimeException("Fault not found: " + faultId));
-        Crew crew = crewRepo.findById(crewId)
+        Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(() -> new RuntimeException("Crew not found: " + crewId));
 
         FaultAssignment assignment = new FaultAssignment();

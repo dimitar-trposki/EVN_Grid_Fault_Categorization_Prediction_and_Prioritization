@@ -40,7 +40,7 @@ public class Location {
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Equipment> equipments;
 
-    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WeatherData> weatherData;
+//    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<WeatherData> weatherData;
 
 }

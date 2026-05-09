@@ -28,11 +28,6 @@ public class CrewController {
         return ResponseEntity.ok(crewService.getAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getOne(@PathVariable Long id) {
-        return ResponseEntity.ok(crewService.getById(id));
-    }
-
     @PostMapping("/{crewId}/assign/{faultId}")
     public ResponseEntity<?> assign(@PathVariable Long crewId,
                                     @PathVariable Long faultId) {
