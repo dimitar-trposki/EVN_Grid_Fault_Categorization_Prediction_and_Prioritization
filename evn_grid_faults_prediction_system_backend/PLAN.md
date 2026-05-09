@@ -203,6 +203,10 @@
 - [ ] **Mapper(s)** — `RiskPredictionMapper`
 - [ ] **Custom exceptions** — reuse `AiServiceException` from Module 7
 
+> **Note:** `WeatherService.getLatestForRiskInput(Long locationId)` is ready and should be used here when
+> building the risk prediction input. It never throws — use `Optional.ifPresent` to add weather fields to the
+> AI request payload, and omit them if empty.
+
 ---
 
 ## Module 9 — Priority Scoring
@@ -300,23 +304,33 @@
 ## Module 13 — Weather Integration
 
 > Covers: fetch weather data from external API per location, store in `WeatherData`, use in risk prediction.
-> `WeatherData` entity + `WeatherDataRepository` (empty) exist. No service or client.
+> **Built FIRST (before Modules 7/8/9)** so that Module 8 (Risk Prediction) can wire WeatherService directly
+> during its own implementation — no back-fill step needed.
 
-- [ ] **Repository custom methods** — `WeatherDataRepository`: `findLatestByLocationId`,
-  `findByLocationIdAndRecordedAtBetween`
-- [ ] **Request DTOs** — `WeatherFetchRequest` (locationId) (as `record`)
-- [ ] **Response DTOs** — `WeatherDataResponse` (temperature, windSpeed, humidity, precipitation, condition,
-  recordedAt) (as `record`)
-- [ ] **Service interface** — `WeatherService`: `fetchAndStore(Long locationId)`, `getLatest(Long locationId)`,
-  `getHistory(Long locationId, LocalDateTime from, LocalDateTime to)`
-- [ ] **Service implementation** — `WeatherServiceImpl`: calls `WeatherClient` (WebClient, URL from
-  `weather.api.base-url` + `weather.api.key`), maps response to `WeatherData`, saves
-- [ ] **Controller + endpoints** — `WeatherController`: `POST /api/v1/weather/fetch` (ADMIN/OPERATOR),
-  `GET /api/v1/locations/{id}/weather`, `GET /api/v1/locations/{id}/weather/history`
-- [ ] **Mapper(s)** — `WeatherDataMapper`
-- [ ] **Custom exceptions** — `ExternalApiException` (weather API unreachable); reuse `ResourceNotFoundException`
-
-> **Also create:** `client/WeatherClient` using `WebClient`, configured via `application.properties`.
+- [x] **Entity** — `WeatherData` (id, location FK, recordedAt, temperature, windSpeed, humidity, precipitation,
+  weatherCondition enum, sourceApi)
+- [x] **Repository** — `WeatherDataRepository`: `findByLocationId`, `findTopByLocationIdOrderByRecordedAtDesc`,
+  `findByLocationIdAndRecordedAtBetween`, `deleteByRecordedAtBefore`
+- [x] **Response DTO** — `WeatherDataResponse` (record in `dto/response/`)
+- [x] **Provider abstraction** — `client/weather/` package: `WeatherProvider` interface, `WeatherFetchResult` record,
+  `WmoCodeMapper` (WMO codes → SUNNY/CLOUDY/RAINY/SNOW/STORM), `OpenMeteoWeatherProvider`
+  (`@ConditionalOnProperty(weather.provider=open-meteo)`, uses `RestClient`, no API key required)
+- [x] **Service interface** — `WeatherService`: `fetchAndStore`, `fetchAndStoreForAll`, `getLatest`, `getHistory`,
+  `getLatestForRiskInput` (never throws — for Module 8)
+- [x] **Service implementation** — `WeatherServiceImpl`: inline mapping; `fetchAndStoreForAll` iterates all locations
+  (Location has no criticalityLevel field — `only-critical-locations` flag reserved for future use); 100 ms delay
+  between calls when >10 locations
+- [x] **Scheduler** — `WeatherRefreshScheduler` (`@ConditionalOnProperty(weather.refresh.enabled=true)`,
+  `@Scheduled(cron)`) in `scheduling/` package; `@EnableScheduling` already on main class
+- [x] **Controller + endpoints** — `WeatherController` at `/api/v1/weather`:
+  `POST /fetch/{locationId}` (DISPATCHER/MANAGER/ADMIN), `POST /fetch/all` (ADMIN),
+  `GET /location/{id}/latest` (authenticated), `GET /location/{id}/history?from&to` (DISPATCHER/MANAGER/ADMIN,
+  max 90 days)
+- [x] **ExternalApiException handler** — added 503 handler to `GlobalExceptionHandler`
+- [x] **Unit test** — `WmoCodeMapperTest` covers all 5 WeatherCondition values + unknown-code fallback
+- [x] **Config** — `application.properties`: `weather.provider`, `weather.api.base-url`, `weather.api.timeout-seconds`,
+  `weather.refresh.enabled`, `weather.refresh.cron`, `weather.refresh.only-critical-locations`
+- [x] **DB** — auto-created by `ddl-auto=create-drop` (dev/H2); index on `(location_id, recorded_at)`
 
 ---
 
@@ -470,7 +484,7 @@
 | 10 | Crews & Crew Members  | In progress (partial) |
 | 11 | Fault Assignment      | In progress (partial) |
 | 12 | Interventions         | In progress (partial) |
-| 13 | Weather Integration   | Not started           |
+| 13 | Weather Integration   | Done ✓                |
 | 14 | Notifications         | In progress (partial) |
 | 15 | Dashboard & Analytics | Done ✓                |
 | 16 | Import                | Done ✓                |
