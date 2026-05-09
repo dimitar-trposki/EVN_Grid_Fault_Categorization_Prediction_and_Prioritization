@@ -15,6 +15,17 @@ public interface FaultReportRepository extends JpaRepository<FaultReport, Long> 
     // Used by RiskPredictionService to assess fault frequency at a location
     long countByLocationId(Long locationId);
 
+    // Used by FaultPriorityService to check recurrence (faults at same location in last 30 days)
+    @Query(value = """
+            SELECT COUNT(DISTINCT fr.id) FROM fault_report fr
+            JOIN fault_status_history fsh ON fsh.fault_report_id = fr.id
+            WHERE fr.location_id = :locationId
+            AND fsh.fault_status = 'REPORTED'
+            AND fsh.changed_at >= :after
+            """, nativeQuery = true)
+    long countByLocationIdReportedAfter(@Param("locationId") Long locationId,
+                                        @Param("after") LocalDateTime after);
+
     // --- dashboard aggregations ---
 
     @Query(value = """

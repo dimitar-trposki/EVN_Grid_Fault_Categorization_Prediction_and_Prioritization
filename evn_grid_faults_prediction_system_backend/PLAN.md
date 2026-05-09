@@ -238,21 +238,36 @@
 
 > Covers: auto-calculate priority score for active faults, assign category (CRITICAL/HIGH/MEDIUM/LOW), show explanation,
 > allow manual override.
-> Nothing exists beyond `FaultPriority` enum.
 
-- [ ] **Repository custom methods** — `FaultReportRepository`: `findByFaultPriorityOrderByCreatedAtDesc`,
-  `findActiveFaults` (status not CLOSED/RESOLVED)
-- [ ] **Request DTOs** — `PriorityOverrideRequest` (manualPriority, reason) (as `record`)
-- [ ] **Response DTOs** — `PriorityResponse` (faultId, score, level, explanation, calculationSource AUTO/MANUAL,
-  calculatedAt) (as `record`)
-- [ ] **Service interface** — `PriorityService`: `calculatePriority(Long faultId)`,
-  `overridePriority(Long faultId, PriorityOverrideRequest)`, `recalculateAllActive()`
-- [ ] **Service implementation** — `PriorityServiceImpl`: calls `AiClient.calculatePriority()`, updates
-  `FaultReport.faultPriority`, persists explanation; falls back gracefully
-- [ ] **Controller + endpoints** — `PriorityController`: `POST /api/v1/faults/{id}/calculate-priority` (DISPATCHER),
-  `PUT /api/v1/faults/{id}/priority` (manual override, DISPATCHER/MANAGER), `GET /api/v1/faults/{id}/priority`
-- [ ] **Mapper(s)** — inline in service (no dedicated mapper needed for this module)
-- [ ] **Custom exceptions** — reuse `AiServiceException`; `BadRequestException` for invalid manual priority value
+- [x] **Entity** — `FaultPriorityRecord` (separate table; `FaultPriority` enum kept as categorical type).
+  Fields: `id`, `faultReport` (OneToOne unique), `priorityLevel` (FaultPriority enum), `priorityScore`, `explanation`
+  (TEXT), `calculatedAt`, `calculationSource` (`"AI"`, `"FALLBACK"`, `"MANUAL"`), `isFallback`.
+- [x] **Repository** — `FaultPriorityRepository`: `findByFaultReportId`, `findByPriorityLevel`,
+  `findTop10ByOrderByPriorityScoreDesc`, `findByCalculatedAtAfter`;
+  `findTopActiveFaultPriorities(limit)` — native SQL JOIN on FaultStatusHistory to exclude RESOLVED/CLOSED faults.
+  `FaultReportRepository` extended with `countByLocationIdReportedAfter` (native SQL via FaultStatusHistory join)
+  for recurrence check.
+- [x] **Request DTOs** — `ManualPriorityOverrideRequest` (priorityLevel, explanation) (record)
+- [x] **Response DTOs** — `FaultPriorityResponse` (id, faultReportId, priorityLevel, priorityScore, explanation,
+  calculatedAt, calculationSource, isFallback) (record)
+- [x] **Mapper** — `helpers/FaultPriorityMapper` (`@Component`)
+- [x] **Service interface** — `FaultPriorityService`: `calculatePriority`, `recalculate`, `getByFault`,
+  `manualOverride`, `getTopPriorityFaults`
+- [x] **Service implementation** — `FaultPriorityServiceImpl`: `calculatePriority` skips re-call if non-fallback record
+  exists; `recalculate` always re-runs; reads FaultClassificationResult if available (falls back to FaultReport fields);
+  `weatherService.getLatestForRiskInput` used (never throws); recurrence check via `countByLocationIdReportedAfter`
+  (>1 fault = recurring); `manualOverride` sets `calculationSource="MANUAL"`, `isFallback=false`, also updates
+  `FaultReport.faultPriority`; `getTopPriorityFaults` uses native-SQL active-fault filter.
+- [x] **Controller** — `FaultPriorityController` at `/api/v1/faults/{faultId}/priority`:
+  `POST /calculate` (DISPATCHER/OPERATOR/ADMIN), `POST /recalculate` (DISPATCHER/MANAGER/ADMIN),
+  `GET /` (authenticated), `PUT /override` (DISPATCHER/MANAGER/ADMIN).
+  `PriorityQueryController` at `/api/v1/priorities`: `GET /top?limit=10` (DISPATCHER/MANAGER/ADMIN).
+- [x] **Lifecycle wiring** — `FaultReportServiceImpl.createFault()` calls `calculatePriority()` after
+  `classifyFault()`; both wrapped in independent try/catch; order: save fault → classify → calculate priority →
+  set REPORTED status.
+
+> **Note:** `affectedUsersEstimate` defaults to `0` (no field on `FaultReport`); `locationCriticality` uses the
+> region name as a proxy label (no criticality field on `Location`). Both can be improved once those fields exist.
 
 ---
 
@@ -505,7 +520,7 @@
 | 6  | Attachments           | In progress (partial) |
 | 7  | AI Classification     | Done ✓                |
 | 8  | Risk Prediction       | Done ✓                |
-| 9  | Priority Scoring      | Not started           |
+| 9  | Priority Scoring      | Done ✓                |
 | 10 | Crews & Crew Members  | In progress (partial) |
 | 11 | Fault Assignment      | In progress (partial) |
 | 12 | Interventions         | In progress (partial) |

@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "PowerShell(cd \"C:\\\\Users\\\\dimit\\\\FINKI\\\\EVN_Grid_Fault_Categorization_Prediction_and_Prioritization\\\\evn_grid_faults_prediction_system_backend\"; Get-ChildItem -Recurse -Path src\\\\ -File | Select-Object FullName | ForEach-Object { $_.FullName -replace [regex]::Escape\\($PWD\\), 'src' })"
+      "PowerShell(cd \"C:\\\\Users\\\\dimit\\\\FINKI\\\\EVN_Grid_Fault_Categorization_Prediction_and_Prioritization\\\\evn_grid_faults_prediction_system_backend\"; Get-ChildItem -Recurse -Path src\\\\ -File | Select-Object FullName | ForEach-Object { $_.FullName -replace [regex]::Escape\\($PWD\\), 'src' })",
+      "Bash(mvn compile *)"
     ]
   }
 }

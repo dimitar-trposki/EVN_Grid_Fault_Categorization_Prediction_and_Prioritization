@@ -12,6 +12,7 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultReportRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.LocationRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultClassificationService;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultPriorityService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultReportService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultWorkflowService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,19 +30,22 @@ public class FaultReportServiceImpl implements FaultReportService {
     private final CustomerRepository customerRepo;
     private final FaultWorkflowService workflowService;
     private final FaultClassificationService faultClassificationService;
+    private final FaultPriorityService faultPriorityService;
 
     public FaultReportServiceImpl(
             FaultReportRepository faultRepo,
             LocationRepository locationRepo,
             CustomerRepository customerRepo,
             FaultWorkflowService workflowService,
-            FaultClassificationService faultClassificationService
+            FaultClassificationService faultClassificationService,
+            FaultPriorityService faultPriorityService
     ) {
         this.faultRepo = faultRepo;
         this.locationRepo = locationRepo;
         this.customerRepo = customerRepo;
         this.workflowService = workflowService;
         this.faultClassificationService = faultClassificationService;
+        this.faultPriorityService = faultPriorityService;
     }
 
     @Override
@@ -64,11 +68,16 @@ public class FaultReportServiceImpl implements FaultReportService {
 
         fault = faultRepo.save(fault);
 
-        // TODO: make async so the AI HTTP call does not block the customer's create-fault request
         try {
             faultClassificationService.classifyFault(fault.getId());
         } catch (Exception e) {
             log.warn("Auto-classification failed for faultId={}: {}", fault.getId(), e.getMessage());
+        }
+
+        try {
+            faultPriorityService.calculatePriority(fault.getId());
+        } catch (Exception e) {
+            log.warn("Auto-priority calculation failed for faultId={}: {}", fault.getId(), e.getMessage());
         }
 
         workflowService.changeStatus(fault, FaultStatus.REPORTED);
