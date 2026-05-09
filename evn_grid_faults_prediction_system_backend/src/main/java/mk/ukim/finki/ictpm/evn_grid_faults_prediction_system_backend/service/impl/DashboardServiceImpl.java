@@ -168,15 +168,16 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     private MapRiskZoneResponse toMapRiskZoneResponse(RiskPrediction rp) {
-        Location location = rp.getFaultReport().getLocation();
-        double probability = rp.getProbability();
-        String riskLevel = probability > 0.7 ? "HIGH" : probability > 0.4 ? "MEDIUM" : "LOW";
+        Location location = rp.getLocation();
+        double score = rp.getRiskScore() != null ? rp.getRiskScore() : 0.0;
+        String level = rp.getRiskLevel() != null ? rp.getRiskLevel()
+                : (score > 70 ? "HIGH" : score > 40 ? "MEDIUM" : "LOW");
         return new MapRiskZoneResponse(
                 location.getId(),
                 location.getLatitude(),
                 location.getLongitude(),
-                probability,
-                riskLevel
+                score,
+                level
         );
     }
 

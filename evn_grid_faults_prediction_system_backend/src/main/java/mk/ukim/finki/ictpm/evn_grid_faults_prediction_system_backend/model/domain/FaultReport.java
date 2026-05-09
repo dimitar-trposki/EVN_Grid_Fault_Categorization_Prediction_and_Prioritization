@@ -52,9 +52,6 @@ public class FaultReport {
     )
     private Location location;
 
-    @OneToOne(mappedBy = "faultReport", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private RiskPrediction riskPrediction;
-
     @OneToMany(mappedBy = "faultReport", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FaultAssignment> faultAssignments;
 

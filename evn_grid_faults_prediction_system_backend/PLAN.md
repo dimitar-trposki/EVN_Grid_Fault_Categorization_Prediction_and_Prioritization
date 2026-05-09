@@ -196,26 +196,41 @@
 
 ## Module 8 — Risk Prediction
 
-> Covers: trigger risk prediction per fault (location + equipment + weather + history), store result, show factors.
-> `RiskPrediction` entity + `RiskPredictionRepository` (empty) exist.
+> Covers: trigger risk prediction per location/equipment/region, store result, show contributing factors.
 
-- [ ] **Repository custom methods** — `RiskPredictionRepository`: `findByFaultReportId`, `findByLocationId` (for
-  dashboard risk zones)
-- [ ] **Request DTOs** — `RiskPredictionRequest` (locationId, equipmentId, weatherData, historyWindow) (as `record`)
-- [ ] **Response DTOs** — `RiskPredictionResponse` (score, level LOW/MEDIUM/HIGH, contributingFactors, predictedAt) (as
-  `record`)
-- [ ] **Service interface** — `RiskPredictionService`: `predictRisk(Long faultId)`,
-  `predictRiskForLocation(Long locationId)`, `getByFault(Long faultId)`
-- [ ] **Service implementation** — `RiskPredictionServiceImpl`: calls `AiClient.predictRisk()`, persists
-  `RiskPrediction`, falls back gracefully
-- [ ] **Controller + endpoints** — `RiskPredictionController`: `POST /api/v1/faults/{id}/predict-risk` (OPERATOR,
-  DISPATCHER), `GET /api/v1/faults/{id}/risk`, `GET /api/v1/locations/{id}/risk`
-- [ ] **Mapper(s)** — `RiskPredictionMapper`
-- [ ] **Custom exceptions** — reuse `AiServiceException` from Module 7
+- [x] **Entity restructure** — `RiskPrediction` replaced: removed legacy `faultReport` OneToOne + `probability` +
+  `recommendation`; added `location` (ManyToOne nullable), `equipment` (ManyToOne nullable), `riskScore`, `riskLevel`,
+  `contributingFactors` (TEXT, pipe-separated), `predictionDate`, `isFallback`. `FaultReport.riskPrediction`
+  back-reference removed (was unused in all service code).
+- [x] **Repository** — `RiskPredictionRepository` rewritten: `findByLocationId`, `findByEquipmentId`,
+  `findByRiskLevel`, `findTop10ByOrderByRiskScoreDesc`, `findByPredictionDateAfter`,
+  `findTopByLocationIdOrderByPredictionDateDesc`, `findTopByEquipmentIdOrderByPredictionDateDesc`;
+  `findTopRiskZonesWithLocation()` updated to join directly on `location` (removed faultReport join).
+  `FaultReportRepository` extended with `countByLocationId` for fault frequency input.
+- [x] **Request DTOs** — `TriggerRiskPredictionRequest` (locationId, equipmentId, regionId — all optional) (record)
+- [x] **Response DTOs** — `RiskPredictionResponse` (id, locationId, equipmentId, riskScore, riskLevel,
+  contributingFactors, predictionDate, isFallback) (record)
+- [x] **Mapper** — `helpers/RiskPredictionMapper` (`@Component`): `toResponse`, `serializeFactors`,
+  `deserializeFactors`
+- [x] **Service interface** — `RiskPredictionService`: `predictForLocation`, `predictForEquipment`,
+  `predictForRegion`, `getLatestForLocation`, `getLatestForEquipment`, `getHighRiskZones(int limit)`,
+  `getHistoryForLocation`
+- [x] **Service implementation** — `RiskPredictionServiceImpl`: wires weather directly via
+  `weatherService.getLatestForRiskInput(locationId)` (Optional, never throws); `criticalityLevel` defaults to 1
+  (no field on Location), `equipmentAgeYears` defaults to 0.0 (no install date on Equipment) — noted inline;
+  `predictForRegion` iterates per-location, wraps each call in try/catch, adds async TODO; all fallback
+  results are persisted
+- [x] **Controller** — `RiskPredictionController` at `/api/v1/risk-predictions`:
+  `POST /location/{id}`, `POST /equipment/{id}` (DISPATCHER/MANAGER/ADMIN),
+  `POST /region/{id}` (MANAGER/ADMIN),
+  `GET /location/{id}/latest`, `GET /equipment/{id}/latest`, `GET /location/{id}/history` (authenticated),
+  `GET /high-risk?limit=10` (authenticated)
+- [x] **Dashboard updated** — `DashboardServiceImpl.toMapRiskZoneResponse()` updated to use `rp.getLocation()`
+  and `rp.getRiskScore()` / `rp.getRiskLevel()` directly
 
-> **Note:** `WeatherService.getLatestForRiskInput(Long locationId)` is ready and should be used here when
-> building the risk prediction input. It never throws — use `Optional.ifPresent` to add weather fields to the
-> AI request payload, and omit them if empty.
+> **Note on defaults:** `criticalityLevel=1` and `equipmentAgeYears=0.0` are passed when no source data exists.
+> These can be improved once Module 5 adds fault timestamps (for recency weighting) and equipment gets an
+> `installedAt` field.
 
 ---
 
@@ -489,7 +504,7 @@
 | 5  | Fault Reports (core)  | In progress (partial) |
 | 6  | Attachments           | In progress (partial) |
 | 7  | AI Classification     | Done ✓                |
-| 8  | Risk Prediction       | Not started           |
+| 8  | Risk Prediction       | Done ✓                |
 | 9  | Priority Scoring      | Not started           |
 | 10 | Crews & Crew Members  | In progress (partial) |
 | 11 | Fault Assignment      | In progress (partial) |

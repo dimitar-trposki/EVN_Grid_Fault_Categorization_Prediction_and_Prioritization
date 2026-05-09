@@ -12,6 +12,9 @@ import java.util.List;
 @Repository
 public interface FaultReportRepository extends JpaRepository<FaultReport, Long> {
 
+    // Used by RiskPredictionService to assess fault frequency at a location
+    long countByLocationId(Long locationId);
+
     // --- dashboard aggregations ---
 
     @Query(value = """
