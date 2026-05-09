@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enums.WeatherCondition;
 
 import java.time.LocalDateTime;
 
@@ -24,12 +23,20 @@ public class WeatherData {
     @Column(nullable = false)
     private Double temperature;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "weather_condition", nullable = false, length = 20)
-    private WeatherCondition weatherCondition;
+    @Column(nullable = false)
+    private Double windSpeed;
 
     @Column(nullable = false)
-    private LocalDateTime timestamp;
+    private Double humidity;
+
+    @Column(nullable = false)
+    private Double precipitation;
+
+    @Column(nullable = false, length = 100)
+    private String condition;
+
+    @Column(nullable = false)
+    private LocalDateTime recordedAt;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(
@@ -38,5 +45,4 @@ public class WeatherData {
             foreignKey = @ForeignKey(name = "fk_weather_data_location")
     )
     private Location location;
-
 }
