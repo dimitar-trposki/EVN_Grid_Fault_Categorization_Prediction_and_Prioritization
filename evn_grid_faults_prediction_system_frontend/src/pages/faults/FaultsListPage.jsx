@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authStore';
 import faultRepository from '../../api/faultRepository';
@@ -11,26 +11,24 @@ const FaultsListPage = () => {
     const [faults, setFaults] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchFaults = useCallback(async () => {
-        try {
-            let res;
-            if (user?.role === 'CUSTOMER') {
-                res = await faultRepository.getMyFaults({ page: 0, size: 50 });
-            } else {
-                res = await faultRepository.getAll({ page: 0, size: 50 });
-            }
-            // Spring returns paginated responses usually containing 'content' array
-            setFaults(res.data.content || res.data);
-        } catch (err) {
-            console.error('Failed to fetch faults', err);
-        } finally {
-            setLoading(false);
-        }
-    }, [user?.role]);
-
     useEffect(() => {
+        const fetchFaults = async () => {
+            try {
+                let res;
+                if (user?.role === 'CUSTOMER') {
+                    res = await faultRepository.getMyFaults({ page: 0, size: 50 });
+                } else {
+                    res = await faultRepository.getAll({ page: 0, size: 50 });
+                }
+                setFaults(res.data.content || res.data);
+            } catch (err) {
+                console.error('Failed to fetch faults', err);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchFaults();
-    }, [fetchFaults]);
+    }, [user?.role]);
 
     const getPriorityBadgeClass = (priority) => {
         switch (priority) {

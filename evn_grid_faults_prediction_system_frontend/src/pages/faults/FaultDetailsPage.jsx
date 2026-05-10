@@ -16,31 +16,30 @@ const FaultDetailsPage = () => {
 
     const [uploading, setUploading] = useState(false);
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const faultRes = await faultRepository.getById(id);
-            setFault(faultRes.data);
-
-            const [histRes, attRes, classRes, prioRes] = await Promise.all([
-                faultRepository.getHistory(id).catch(() => ({ data: [] })),
-                faultRepository.getAttachments(id).catch(() => ({ data: [] })),
-                faultRepository.getClassification(id).catch(() => ({ data: null })),
-                faultRepository.getPriority(id).catch(() => ({ data: null }))
-            ]);
-
-            setHistory(histRes.data);
-            setAttachments(attRes.data);
-            setClassification(classRes.data);
-            setPriority(prioRes.data);
-        } catch (err) {
-            console.error('Failed to load fault details', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const faultRes = await faultRepository.getById(id);
+                setFault(faultRes.data);
+
+                const [histRes, attRes, classRes, prioRes] = await Promise.all([
+                    faultRepository.getHistory(id).catch(() => ({ data: [] })),
+                    faultRepository.getAttachments(id).catch(() => ({ data: [] })),
+                    faultRepository.getClassification(id).catch(() => ({ data: null })),
+                    faultRepository.getPriority(id).catch(() => ({ data: null }))
+                ]);
+
+                setHistory(histRes.data);
+                setAttachments(attRes.data);
+                setClassification(classRes.data);
+                setPriority(prioRes.data);
+            } catch (err) {
+                console.error('Failed to load fault details', err);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchData();
     }, [id]);
 
@@ -98,15 +97,15 @@ const FaultDetailsPage = () => {
 
     if (loading) return (
         <div className="faults-container">
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-                <p style={{ color: '#94a3b8' }}>Loading fault details...</p>
+            <div className="centered-loading">
+                <p className="text-muted">Loading fault details...</p>
             </div>
         </div>
     );
 
     if (!fault) return (
         <div className="faults-container">
-            <p style={{ color: '#94a3b8', textAlign: 'center', marginTop: '2rem' }}>Fault not found.</p>
+            <p className="text-muted" style={{ textAlign: 'center', marginTop: '2rem' }}>Fault not found.</p>
         </div>
     );
 
@@ -129,22 +128,22 @@ const FaultDetailsPage = () => {
                 <div className="details-grid">
                     <div className="main-details">
                         <div className="glass-panel" style={{ marginBottom: '2rem' }}>
-                            <h2 style={{ marginTop: 0, color: '#f1f5f9', fontSize: '1.2rem', marginBottom: '1rem' }}>General Info</h2>
-                            <p style={{ color: '#94a3b8', marginBottom: '0.5rem' }}><strong>Tracking Code:</strong> <code>{fault.trackingCode}</code></p>
-                            <p style={{ color: '#94a3b8', marginBottom: '0.5rem' }}><strong>Type:</strong> {fault.faultType?.replace('_', ' ')}</p>
-                            <p style={{ color: '#94a3b8', marginBottom: '0.5rem' }}><strong>Status:</strong> {fault.currentStatus}</p>
-                            <p style={{ color: '#94a3b8', marginBottom: '0.5rem' }}><strong>Reported:</strong> {new Date(fault.reportedAt).toLocaleString()}</p>
-                            <p style={{ color: '#94a3b8', marginBottom: '1.5rem' }}><strong>Location:</strong> {fault.locationAddress || `Location #${fault.locationId}`}</p>
+                            <h2 className="section-header">General Info</h2>
+                            <p className="detail-row"><strong>Tracking Code:</strong> <code>{fault.trackingCode}</code></p>
+                            <p className="detail-row"><strong>Type:</strong> {fault.faultType?.replace('_', ' ')}</p>
+                            <p className="detail-row"><strong>Status:</strong> {fault.currentStatus}</p>
+                            <p className="detail-row"><strong>Reported:</strong> {new Date(fault.reportedAt).toLocaleString()}</p>
+                            <p className="detail-row"><strong>Location:</strong> {fault.locationAddress || `Location #${fault.locationId}`}</p>
 
-                            <h3 style={{ color: '#f1f5f9', fontSize: '1.1rem', marginTop: '1.5rem' }}>Description</h3>
-                            <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1rem', borderRadius: '8px', color: '#cbd5e1' }}>
+                            <h3 className="section-header" style={{ marginTop: '1.5rem', fontSize: '1.1rem' }}>Description</h3>
+                            <div className="description-box">
                                 {fault.description}
                             </div>
                         </div>
 
                         <div className="glass-panel">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                <h2 style={{ margin: 0, color: '#f1f5f9', fontSize: '1.2rem' }}>Attachments</h2>
+                                <h2 className="section-header" style={{ margin: 0 }}>Attachments</h2>
                                 <div className="file-input-wrapper">
                                     <button className="secondary-btn">{uploading ? 'Uploading...' : '+ Upload File'}</button>
                                     <input type="file" onChange={handleFileUpload} disabled={uploading} />
@@ -152,11 +151,11 @@ const FaultDetailsPage = () => {
                             </div>
 
                             {attachments.length === 0 ? (
-                                <p style={{ color: '#94a3b8' }}>No attachments yet.</p>
+                                <p className="text-muted">No attachments yet.</p>
                             ) : (
-                                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                <ul className="attachment-list">
                                     {attachments.map(att => (
-                                        <li key={att.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', marginBottom: '0.5rem' }}>
+                                        <li key={att.id} className="attachment-item">
                                             <span style={{ color: '#cbd5e1' }}>{att.fileName} ({(att.fileSize / 1024).toFixed(1)} KB)</span>
                                             <button className="secondary-btn" style={{ padding: '0.2rem 0.6rem', fontSize: '0.8rem' }} onClick={() => handleDownload(att.id, att.fileName)}>
                                                 Download

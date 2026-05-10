@@ -101,8 +101,8 @@ const FaultSubmissionPage = () => {
                     <h1 className="title">Report a Fault</h1>
                 </div>
 
-                <div className="glass-panel" style={{ maxWidth: '600px', margin: '0 auto' }}>
-                    {error && <div style={{color: '#ef4444', marginBottom: '1rem', background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '8px'}}>{error}</div>}
+                <div className="glass-panel narrow-panel">
+                    {error && <div className="error-message">{error}</div>}
                     
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
@@ -170,7 +170,7 @@ const FaultSubmissionPage = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="primary-btn" style={{width: '100%'}} disabled={submitting}>
+                        <button type="submit" className="primary-btn full-width-btn" disabled={submitting}>
                             {submitting ? 'Submitting...' : 'Submit Report'}
                         </button>
                     </form>
