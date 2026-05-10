@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+data/synthetic_faults.csv
+models/*.joblib
+.idea/
+.DS_Store
+*.egg-info/
+.coverage
