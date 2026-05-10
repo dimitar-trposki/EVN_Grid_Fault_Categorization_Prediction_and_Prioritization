@@ -1,9 +1,12 @@
 import api from './axiosConfig';
 
 const locationRepository = {
-    getAll: () => api.get('/v1/locations'),
-    getByRegion: (regionId) => api.get(`/v1/regions/${regionId}/locations`),
-    getById: (id) => api.get(`/v1/locations/${id}`),
+    getAll: () => api.get('/locations'),
+    getById: (id) => api.get(`/locations/${id}`),
+    getByRegion: (regionId) => api.get(`/regions/${regionId}/locations`),
+    create: (data) => api.post('/locations', data),
+    update: (id, data) => api.put(`/locations/${id}`, data),
+    delete: (id) => api.delete(`/locations/${id}`),
 };
 
 export default locationRepository;

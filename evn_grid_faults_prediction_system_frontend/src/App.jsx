@@ -7,6 +7,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import FaultsListPage from './pages/faults/FaultsListPage';
 import FaultSubmissionPage from './pages/faults/FaultSubmissionPage';
 import FaultDetailsPage from './pages/faults/FaultDetailsPage';
+import LocationsPage from './pages/locations/LocationsPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -61,6 +62,12 @@ const App = () => {
             <Route path="/faults/:id" element={
               <ProtectedRoute>
                 <FaultDetailsPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/locations" element={
+              <ProtectedRoute>
+                <LocationsPage />
               </ProtectedRoute>
             } />
 
