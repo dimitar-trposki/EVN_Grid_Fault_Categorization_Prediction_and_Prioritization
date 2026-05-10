@@ -7,6 +7,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import FaultsListPage from './pages/faults/FaultsListPage';
 import FaultSubmissionPage from './pages/faults/FaultSubmissionPage';
 import FaultDetailsPage from './pages/faults/FaultDetailsPage';
+import EquipmentPage from './pages/equipment/EquipmentPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -49,6 +50,12 @@ const App = () => {
             <Route path="/faults" element={
               <ProtectedRoute>
                 <FaultsListPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/equipment" element={
+              <ProtectedRoute>
+                <EquipmentPage />
               </ProtectedRoute>
             } />
 
