@@ -1,2 +1,0 @@
-# Intelligent System for Categorization, Prediction, and Prioritization of Faults in EVN’s Electrical Distribution Network
-The project focuses on analyzing, designing, and developing an intelligent system for predicting and prioritizing faults in an electrical distribution network, inspired by real processes of companies like EVN. It improves fault reporting, processing, and resolution using AI, analytics, APIs, and interactive interfaces.
