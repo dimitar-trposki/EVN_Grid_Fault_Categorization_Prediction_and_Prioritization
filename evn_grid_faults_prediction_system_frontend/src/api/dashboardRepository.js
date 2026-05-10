@@ -1,20 +1,11 @@
 import api from './axiosConfig';
 
 const dashboardRepository = {
-    getStats: () =>
-        api.get('/dashboard/stats'),
+    getKpis: () =>
+        api.get('/v1/dashboard/kpis'),
 
     getActiveFaults: () =>
-        api.get('/faults?status=ACTIVE'),
-
-    getRecentInterventions: () =>
-        api.get('/interventions/recent'),
-
-    getRiskPredictions: () =>
-        api.get('/risk-predictions/active'),
-
-    getCrewAvailability: () =>
-        api.get('/crews/availability'),
+        api.get('/v1/dashboard/map/faults'),
 };
 
 export default dashboardRepository;

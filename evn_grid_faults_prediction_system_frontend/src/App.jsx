@@ -1,12 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { useAuth } from './context/authStore';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
-import DashboardPage from './pages/dashboard/DashboardPage'; // DODAJ OVAJ IMPORT
+import DashboardPage from './pages/dashboard/DashboardPage';
+import FaultsListPage from './pages/faults/FaultsListPage';
+import FaultSubmissionPage from './pages/faults/FaultSubmissionPage';
+import FaultDetailsPage from './pages/faults/FaultDetailsPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
   return user ? children : <Navigate to="/login" />;
+};
+
+const PublicRoute = ({ children }) => {
+  const { user } = useAuth();
+  return user ? <Navigate to="/dashboard" /> : children;
 };
 
 const App = () => {
@@ -14,8 +23,22 @@ const App = () => {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <PublicRoute>
+                  <RegisterPage />
+                </PublicRoute>
+              }
+            />
 
             <Route path="/dashboard" element={
               <ProtectedRoute>
@@ -23,7 +46,25 @@ const App = () => {
               </ProtectedRoute>
             } />
 
-            <Route path="*" element={<Navigate to="/login" />} />
+            <Route path="/faults" element={
+              <ProtectedRoute>
+                <FaultsListPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/faults/new" element={
+              <ProtectedRoute>
+                <FaultSubmissionPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/faults/:id" element={
+              <ProtectedRoute>
+                <FaultDetailsPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

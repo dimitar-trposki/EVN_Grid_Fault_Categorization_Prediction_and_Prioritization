@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/authStore';
 
 const LoginPage = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -20,7 +20,7 @@ const LoginPage = () => {
         try {
             await login(credentials);
             navigate('/dashboard');
-        } catch (err) {
+        } catch {
             setError('Invalid email or password');
         } finally {
             setLoading(false);
