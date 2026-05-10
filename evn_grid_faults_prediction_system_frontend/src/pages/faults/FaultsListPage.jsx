@@ -1,22 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authStore';
 import faultRepository from '../../api/faultRepository';
 import Navbar from '../../components/Navbar';
 import './Faults.css';
 
 const FaultsListPage = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [faults, setFaults] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchFaults();
-    }, []);
-
-    const fetchFaults = async () => {
-        setLoading(true);
+    const fetchFaults = useCallback(async () => {
         try {
             let res;
             if (user?.role === 'CUSTOMER') {
@@ -31,7 +26,11 @@ const FaultsListPage = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user?.role]);
+
+    useEffect(() => {
+        fetchFaults();
+    }, [fetchFaults]);
 
     const getPriorityBadgeClass = (priority) => {
         switch (priority) {
@@ -82,11 +81,11 @@ const FaultsListPage = () => {
                                             <td><code>{fault.trackingCode}</code></td>
                                             <td>{fault.title}</td>
                                             <td>
-                                                <span className={`badge ${getPriorityBadgeClass(fault.priorityLevel)}`}>
-                                                    {fault.priorityLevel || 'UNASSIGNED'}
+                                                <span className={`badge ${getPriorityBadgeClass(fault.faultPriority)}`}>
+                                                    {fault.faultPriority || 'UNASSIGNED'}
                                                 </span>
                                             </td>
-                                            <td>{fault.status}</td>
+                                            <td>{fault.currentStatus}</td>
                                             <td>{new Date(fault.reportedAt).toLocaleDateString()}</td>
                                         </tr>
                                     ))}

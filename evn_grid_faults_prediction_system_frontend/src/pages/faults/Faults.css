@@ -37,8 +37,9 @@
 
 .faults-content {
     padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .page-header {
@@ -123,6 +124,7 @@
     padding: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     color: #e2e8f0;
+    text-align: left;
 }
 
 .faults-table tr {
