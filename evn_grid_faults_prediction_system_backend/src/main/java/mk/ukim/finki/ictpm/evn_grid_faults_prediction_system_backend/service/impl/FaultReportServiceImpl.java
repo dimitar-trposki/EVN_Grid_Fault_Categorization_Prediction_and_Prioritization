@@ -30,10 +30,12 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultStatusHistoryRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.LocationRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.UserRepository;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.AuditLogService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultClassificationService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultPriorityService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultReportService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultWorkflowService;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.NotificationService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.specification.FaultSpecification;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.util.TrackingCodeGenerator;
 import org.springframework.data.domain.Page;
@@ -62,6 +64,8 @@ public class FaultReportServiceImpl implements FaultReportService {
     private final FaultReportMapper faultReportMapper;
     private final FaultStatusHistoryMapper historyMapper;
     private final TrackingCodeGenerator trackingCodeGenerator;
+    private final NotificationService notificationService;
+    private final AuditLogService auditLogService;
 
     public FaultReportServiceImpl(
             FaultReportRepository faultRepo,
@@ -74,7 +78,9 @@ public class FaultReportServiceImpl implements FaultReportService {
             FaultPriorityService faultPriorityService,
             FaultReportMapper faultReportMapper,
             FaultStatusHistoryMapper historyMapper,
-            TrackingCodeGenerator trackingCodeGenerator
+            TrackingCodeGenerator trackingCodeGenerator,
+            NotificationService notificationService,
+            AuditLogService auditLogService
     ) {
         this.faultRepo = faultRepo;
         this.locationRepo = locationRepo;
@@ -87,6 +93,8 @@ public class FaultReportServiceImpl implements FaultReportService {
         this.faultReportMapper = faultReportMapper;
         this.historyMapper = historyMapper;
         this.trackingCodeGenerator = trackingCodeGenerator;
+        this.notificationService = notificationService;
+        this.auditLogService = auditLogService;
     }
 
     // --- Legacy deprecated methods ---
@@ -141,6 +149,12 @@ public class FaultReportServiceImpl implements FaultReportService {
         FaultReport fault = buildFault(dto.title(), dto.description(), location, customer,
                 dto.faultType(), FaultPriority.LOW, FaultClassification.OTHER, FaultSourceType.CUSTOMER_PORTAL);
         fault = faultRepo.save(fault);
+        try {
+            auditLogService.log("FaultReport", fault.getId(), "CREATE", null,
+                    "trackingCode=" + fault.getTrackingCode());
+        } catch (Exception e) {
+            log.warn("Audit log failed for fault CREATE id={}: {}", fault.getId(), e.getMessage());
+        }
         runAiLifecycle(fault);
         workflowService.changeStatus(fault, FaultStatus.REPORTED);
         return faultReportMapper.toResponse(fault);
@@ -158,6 +172,12 @@ public class FaultReportServiceImpl implements FaultReportService {
         FaultReport fault = buildFault(dto.title(), dto.description(), location, customer,
                 dto.faultType(), FaultPriority.LOW, FaultClassification.OTHER, FaultSourceType.OPERATOR_CALL_CENTER);
         fault = faultRepo.save(fault);
+        try {
+            auditLogService.log("FaultReport", fault.getId(), "CREATE", null,
+                    "trackingCode=" + fault.getTrackingCode());
+        } catch (Exception e) {
+            log.warn("Audit log failed for fault CREATE id={}: {}", fault.getId(), e.getMessage());
+        }
         runAiLifecycle(fault);
         workflowService.changeStatus(fault, FaultStatus.REPORTED);
         return faultReportMapper.toResponse(fault);
@@ -244,11 +264,30 @@ public class FaultReportServiceImpl implements FaultReportService {
                 .orElseThrow(() -> new ResourceNotFoundException("FaultReport", id));
         User user = userRepo.findByEmail(callerEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User for email: " + callerEmail));
+        FaultStatus oldStatus = historyRepo.findByFaultReportIdOrderByChangedAtDesc(id)
+                .stream().findFirst().map(FaultStatusHistory::getFaultStatus).orElse(null);
         boolean customerVisible = dto.customerVisible() != null ? dto.customerVisible() : true;
         if (user.getUserRole() == RoleType.CUSTOMER) {
             workflowService.changeStatus(fault, dto.status(), null, user.getCustomer(), dto.note(), customerVisible);
         } else {
             workflowService.changeStatus(fault, dto.status(), user, null, dto.note(), customerVisible);
+        }
+        try {
+            auditLogService.log("FaultReport", id, "STATUS_CHANGE",
+                    oldStatus != null ? oldStatus.name() : null, dto.status().name());
+        } catch (Exception e) {
+            log.warn("Audit log failed for STATUS_CHANGE faultId={}: {}", id, e.getMessage());
+        }
+        if (fault.getCustomer() != null) {
+            try {
+                String msg = "Fault " + fault.getTrackingCode()
+                        + " status changed from " + (oldStatus != null ? oldStatus.name() : "N/A")
+                        + " to " + dto.status().name();
+                notificationService.sendToCustomer(fault.getCustomer().getId(),
+                        "Fault status updated", msg, "STATUS_CHANGE");
+            } catch (Exception e) {
+                log.warn("Notification failed for STATUS_CHANGE faultId={}: {}", id, e.getMessage());
+            }
         }
     }
 

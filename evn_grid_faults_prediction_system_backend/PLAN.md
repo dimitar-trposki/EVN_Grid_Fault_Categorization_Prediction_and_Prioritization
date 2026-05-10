@@ -417,21 +417,28 @@
 ## Module 14 — Notifications
 
 > Covers: send notifications to customer on fault status change; notify crew on assignment; list/mark-read.
-> Partially done: `NotificationService/Impl`, `NotificationController` exist.
 
-- [ ] **Repository custom methods** — `SystemNotificationRepository`: `findByUserIdOrderByCreatedAtDesc`,
-  `findByUserIdAndNotificationStatus`, `countByUserIdAndNotificationStatus(UNREAD)`
-- [ ] **Request DTOs** — none (notifications are created internally by service events)
-- [ ] **Response DTOs** — `NotificationResponse` (id, title, message, type, isRead, createdAt) (as `record`)
-- [ ] **Service interface** — extend `NotificationService`:
-  `notifyCustomerStatusChange(Long faultId, FaultStatus newStatus)`, `notifyCrewAssignment(Long assignmentId)`,
-  `markAsRead(Long notificationId, Long userId)`, `markAllAsRead(Long userId)`, `getForUser(Long userId, Pageable)`
-- [ ] **Service implementation** — extend `NotificationServiceImpl`: fix exceptions, implement markAsRead, integrate
-  with fault status change flow (call from `FaultWorkflowService`) and assignment flow
-- [ ] **Controller + endpoints** — fix `NotificationController` to `/api/v1/notifications`; `GET` (paginated,
-  authenticated user), `PUT /{id}/read`, `PUT /read-all`, `GET /unread-count`
-- [ ] **Mapper(s)** — `NotificationMapper`
-- [ ] **Custom exceptions** — `UnauthorizedException` (marking another user's notification); reuse others
+- [x] **Entity changes** — `SystemNotification`: added `title`, `type`, `channel`, `createdAt`, `customer` (nullable
+  ManyToOne); made `user` nullable to support both User and Customer notifications
+- [x] **Repository custom methods** — `SystemNotificationRepository`: `findByCustomerId`,
+  `findByUserIdAndNotificationStatus`, `findByCustomerIdAndNotificationStatus`,
+  `countByUserIdAndNotificationStatus`, `countByCustomerIdAndNotificationStatus`,
+  `findByUserIdOrderByCreatedAtDesc`, `findByCustomerIdOrderByCreatedAtDesc`
+- [x] **Request DTOs** — none (notifications created internally)
+- [x] **Response DTOs** — `NotificationResponse` (id, title, message, type, channel, isRead, createdAt) (record)
+- [x] **Service interface** — rewritten: legacy methods kept `@Deprecated`; new
+  `sendToUser(Long, String, String, String)`,
+  `sendToCustomer(Long, String, String, String)`, `getMyNotifications(String)`, `getMyUnread(String)`,
+  `countMyUnread(String)`, `markAsRead(Long, String)`, `markAllMineAsRead(String)`
+- [x] **Service implementation** — `NotificationServiceImpl` rewritten: detects User vs Customer by role; all send
+  methods wrapped in try/catch (never block caller); ownership verified in `markAsRead`
+- [x] **Controller + endpoints** — `NotificationController` at `/api/v1/notifications`:
+  `GET /` (my notifications), `GET /unread`, `GET /unread/count`, `PUT /{id}/read`, `PUT /read-all`; all authenticated
+- [x] **Mapper** — `NotificationMapper` (`@Component`)
+- [x] **Wire-up** — `FaultReportServiceImpl.updateStatus`: sends customer notification on status change + audit log;
+  `FaultAssignmentServiceImpl.assignCrew`: notifies crew members "New task assigned" + audit log;
+  `FaultAssignmentServiceImpl.reassignCrew`: notifies old crew "Task reassigned away" + new crew "New task assigned" +
+  audit log
 
 ---
 
@@ -509,27 +516,30 @@
 
 ## Module 18 — Audit Log
 
-> Covers: AOP-based automatic logging of critical actions (create fault, status change, assign crew, priority change,
-> close case); admin view of log.
-> `AuditLog` entity, `AuditLogRepository` (empty), `AuditLogService/Impl` exist.
+> Covers: explicit logging of critical actions (create fault, status change, assign crew, priority change, close case);
+> admin view of log. Direct service calls used instead of AOP (simpler, traceable, per spec scope).
 
-- [ ] **Repository custom methods** — `AuditLogRepository`: `findByUserIdOrderByTimestampDesc`,
-  `findByEntityNameAndEntityId`, `findAllByOrderByTimestampDesc(Pageable)`
-- [ ] **Request DTOs** — none (logs created automatically)
-- [ ] **Response DTOs** — `AuditLogResponse` (id, actorEmail, actorRole, entityName, entityId, actionType, oldValue,
-  newValue, timestamp) (as `record`)
-- [ ] **Service interface** — extend `AuditLogService`:
-  `log(String entityName, Long entityId, String actionType, String oldValue, String newValue, User actor)`,
-  `getAll(Pageable)`, `getByEntity(String entityName, Long entityId)`
-- [ ] **Service implementation** — extend `AuditLogServiceImpl`: implement persistence; fix to use proper entity fields
-  from `AuditLog`
-- [ ] **Controller + endpoints** — `AuditLogController`: `GET /api/v1/audit-logs` (paginated, ADMIN/MANAGER),
-  `GET /api/v1/audit-logs/{entityName}/{entityId}` (per-entity history)
-- [ ] **Mapper(s)** — `AuditLogMapper`
-- [ ] **Custom exceptions** — none needed
-
-> **Also create in this module:** `aspect/AuditAspect` — `@Around` on annotated service methods; extract actor from
-`SecurityContextHolder`; call `AuditLogService.log(...)`. Create `@AuditAction` annotation.
+- [x] **Entity changes** — `AuditLog`: added `entityName`, `entityId`, `actionType`, `oldValue`, `newValue`;
+  made `user` nullable to support system-initiated actions
+- [x] **Repository custom methods** — `AuditLogRepository`: `findByUserId`, `findByEntityNameAndEntityId`,
+  `findByTimestampBetween(from, to, Pageable)`
+- [x] **Request DTOs** — none (logs created internally)
+- [x] **Response DTOs** — `AuditLogResponse` (id, userId, userFullName, entityName, entityId, actionType, oldValue,
+  newValue, createdAt) (record)
+- [x] **Service interface** — rewritten: legacy `log(User, String)` kept `@Deprecated`; new
+  `log(entityName, entityId, actionType, oldValue, newValue)` (context-aware),
+  `log(..., Long userIdOverride)` (system-initiated), `getAll(from, to, Pageable)`, `getByEntity`, `getByUser`
+- [x] **Service implementation** — `AuditLogServiceImpl` rewritten: pulls actor from `SecurityContextHolder` (User
+  principal); all log() calls wrapped in try/catch (never block caller); `getAll` validates range ≤ 90 days
+- [x] **Controller + endpoints** — `AuditLogController` at `/api/v1/audit`:
+  `GET /?from&to&page&size`, `GET /entity/{entityName}/{entityId}`, `GET /user/{userId}`; all ADMIN only
+- [x] **Mapper** — `AuditLogMapper` (`@Component`)
+- [x] **Wire-up** — `FaultReportServiceImpl.createByCustomer/createByOperator`: "CREATE" audit;
+  `FaultReportServiceImpl.updateStatus`: "STATUS_CHANGE" audit;
+  `FaultAssignmentServiceImpl.assignCrew`: "ASSIGN" audit;
+  `FaultAssignmentServiceImpl.reassignCrew`: "REASSIGN" audit;
+  `FaultPriorityServiceImpl.manualOverride`: "PRIORITY_OVERRIDE" audit;
+  `InterventionServiceImpl.closeFault`: "CLOSE" audit
 
 ---
 
@@ -543,30 +553,30 @@
 - [x] DTOs as `record` types in `dto/request/` and `dto/response/` — done for Modules 1-4
 - [x] Fix controller base paths to `/api/v1/...` — done (AuthController kept at `/api/auth/` because security config
   whitelists `/api/auth/**` and cannot be changed)
-- [ ] Add `application.properties` entries: `ai.service.base-url`, `weather.api.base-url`, `weather.api.key`
-- [ ] Create `client/` package with `AiClient` (Module 7) and `WeatherClient` (Module 13)
+- [x] Add `application.properties` entries: `ai.service.base-url`, `weather.api.base-url`, `weather.api.key`
+- [x] Create `client/` package with `AiClient` (Module 7) and `WeatherClient` (Module 13)
 
 ---
 
 ## Progress tracker
 
-| #  | Module                | Status                |
-|----|-----------------------|-----------------------|
-| 1  | Auth & Users          | Done ✓                |
-| 2  | Customers             | Done ✓                |
-| 3  | Regions & Locations   | Done ✓                |
-| 4  | Equipment             | Done ✓                |
-| 5  | Fault Reports (core)  | Done ✓                |
-| 6  | Attachments           | Done ✓                |
-| 7  | AI Classification     | Done ✓                |
-| 8  | Risk Prediction       | Done ✓                |
-| 9  | Priority Scoring      | Done ✓                |
-| 10 | Crews & Crew Members  | Done ✓                |
-| 11 | Fault Assignment      | Done ✓                |
-| 12 | Interventions         | Done ✓                |
-| 13 | Weather Integration   | Done ✓                |
-| 14 | Notifications         | In progress (partial) |
-| 15 | Dashboard & Analytics | Done ✓                |
-| 16 | Import                | Done ✓                |
-| 17 | Export                | Done ✓                |
-| 18 | Audit Log             | In progress (partial) |
+| #  | Module                | Status |
+|----|-----------------------|--------|
+| 1  | Auth & Users          | Done ✓ |
+| 2  | Customers             | Done ✓ |
+| 3  | Regions & Locations   | Done ✓ |
+| 4  | Equipment             | Done ✓ |
+| 5  | Fault Reports (core)  | Done ✓ |
+| 6  | Attachments           | Done ✓ |
+| 7  | AI Classification     | Done ✓ |
+| 8  | Risk Prediction       | Done ✓ |
+| 9  | Priority Scoring      | Done ✓ |
+| 10 | Crews & Crew Members  | Done ✓ |
+| 11 | Fault Assignment      | Done ✓ |
+| 12 | Interventions         | Done ✓ |
+| 13 | Weather Integration   | Done ✓ |
+| 14 | Notifications         | Done ✓ |
+| 15 | Dashboard & Analytics | Done ✓ |
+| 16 | Import                | Done ✓ |
+| 17 | Export                | Done ✓ |
+| 18 | Audit Log             | Done ✓ |

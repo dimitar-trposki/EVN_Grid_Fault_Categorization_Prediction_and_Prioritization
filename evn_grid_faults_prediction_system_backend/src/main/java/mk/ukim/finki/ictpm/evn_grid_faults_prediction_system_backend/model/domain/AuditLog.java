@@ -26,10 +26,24 @@ public class AuditLog {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @Column(name = "entity_name", length = 100)
+    private String entityName;
+
+    @Column(name = "entity_id")
+    private Long entityId;
+
+    @Column(name = "action_type", length = 50)
+    private String actionType;
+
+    @Column(name = "old_value", columnDefinition = "TEXT")
+    private String oldValue;
+
+    @Column(name = "new_value", columnDefinition = "TEXT")
+    private String newValue;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "user_id",
-            nullable = false,
             foreignKey = @ForeignKey(name = "fk_audit_log_user")
     )
     private User user;

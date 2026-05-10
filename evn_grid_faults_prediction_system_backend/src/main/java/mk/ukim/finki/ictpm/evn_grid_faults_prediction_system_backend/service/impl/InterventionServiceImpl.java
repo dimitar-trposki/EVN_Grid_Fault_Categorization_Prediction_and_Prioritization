@@ -25,6 +25,7 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultStatusHistoryRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.InterventionRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.UserRepository;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.AuditLogService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultWorkflowService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.InterventionService;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class InterventionServiceImpl implements InterventionService {
     private final FaultStatusHistoryRepository statusHistoryRepo;
     private final FaultWorkflowService workflowService;
     private final InterventionMapper mapper;
+    private final AuditLogService auditLogService;
 
     public InterventionServiceImpl(InterventionRepository interventionRepo,
                                    FaultReportRepository faultRepo,
@@ -59,7 +61,8 @@ public class InterventionServiceImpl implements InterventionService {
                                    CrewMemberRepository crewMemberRepo,
                                    FaultStatusHistoryRepository statusHistoryRepo,
                                    FaultWorkflowService workflowService,
-                                   InterventionMapper mapper) {
+                                   InterventionMapper mapper,
+                                   AuditLogService auditLogService) {
         this.interventionRepo = interventionRepo;
         this.faultRepo = faultRepo;
         this.crewRepo = crewRepo;
@@ -68,6 +71,7 @@ public class InterventionServiceImpl implements InterventionService {
         this.statusHistoryRepo = statusHistoryRepo;
         this.workflowService = workflowService;
         this.mapper = mapper;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -194,8 +198,8 @@ public class InterventionServiceImpl implements InterventionService {
         Intervention saved = interventionRepo.save(intervention);
 
         // Update fault to RESOLVED
+        FaultReport fault = intervention.getFaultReport();
         try {
-            FaultReport fault = intervention.getFaultReport();
             workflowService.changeStatus(fault, FaultStatus.RESOLVED);
         } catch (Exception e) {
             log.warn("Failed to update fault status to RESOLVED: {}", e.getMessage());
@@ -208,6 +212,15 @@ public class InterventionServiceImpl implements InterventionService {
             crewRepo.save(crew);
         } catch (Exception e) {
             log.warn("Failed to return crew status to AVAILABLE: {}", e.getMessage());
+        }
+
+        // Audit log
+        try {
+            String rootCause = request.rootCause() != null ? request.rootCause() : "N/A";
+            auditLogService.log("FaultReport", fault.getId(), "CLOSE", null,
+                    "rootCause=" + rootCause);
+        } catch (Exception e) {
+            log.warn("Audit log failed for CLOSE faultId={}: {}", fault.getId(), e.getMessage());
         }
 
         return mapper.toResponse(saved);

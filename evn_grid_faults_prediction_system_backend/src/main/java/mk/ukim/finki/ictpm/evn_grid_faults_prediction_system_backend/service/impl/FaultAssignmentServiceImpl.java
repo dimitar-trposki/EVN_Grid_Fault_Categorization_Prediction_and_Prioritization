@@ -21,8 +21,10 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultAssigmentRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultReportRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.UserRepository;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.AuditLogService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultAssignmentService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultWorkflowService;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.NotificationService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +51,8 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
     private final CrewMemberRepository crewMemberRepo;
     private final FaultWorkflowService workflowService;
     private final FaultAssignmentMapper mapper;
+    private final NotificationService notificationService;
+    private final AuditLogService auditLogService;
 
     public FaultAssignmentServiceImpl(FaultAssigmentRepository assignmentRepo,
                                       FaultReportRepository faultReportRepo,
@@ -56,7 +60,9 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
                                       UserRepository userRepo,
                                       CrewMemberRepository crewMemberRepo,
                                       FaultWorkflowService workflowService,
-                                      FaultAssignmentMapper mapper) {
+                                      FaultAssignmentMapper mapper,
+                                      NotificationService notificationService,
+                                      AuditLogService auditLogService) {
         this.assignmentRepo = assignmentRepo;
         this.faultReportRepo = faultReportRepo;
         this.crewRepo = crewRepo;
@@ -64,6 +70,8 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
         this.crewMemberRepo = crewMemberRepo;
         this.workflowService = workflowService;
         this.mapper = mapper;
+        this.notificationService = notificationService;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -106,6 +114,22 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
             log.warn("Failed to update crew status to EN_ROUTE: {}", e.getMessage());
         }
 
+        // Audit log
+        try {
+            auditLogService.log("FaultAssignment", saved.getId(), "ASSIGN", null,
+                    "crewId=" + crew.getId() + ", faultId=" + fault.getId());
+        } catch (Exception e) {
+            log.warn("Audit log failed for ASSIGN assignmentId={}: {}", saved.getId(), e.getMessage());
+        }
+
+        // Notify crew members
+        try {
+            notifyCrewMembers(crew, "New task assigned",
+                    "You have been assigned to fault " + fault.getTrackingCode() + ": " + fault.getTitle());
+        } catch (Exception e) {
+            log.warn("Crew assignment notification failed for crewId={}: {}", crew.getId(), e.getMessage());
+        }
+
         return mapper.toResponse(saved);
     }
 
@@ -114,6 +138,9 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
         FaultAssignment current = assignmentRepo.findFirstByFaultReportIdOrderByAssignedAtDesc(faultReportId)
                 .orElseThrow(() -> new ResourceNotFoundException("No assignment found for fault " + faultReportId));
 
+        Crew oldCrew = current.getCrew();
+        Long oldCrewId = oldCrew.getId();
+
         // Mark current assignment as REASSIGNED
         current.setAssignmentStatus(STATUS_REASSIGNED);
         current.setCompletedAt(LocalDateTime.now());
@@ -121,7 +148,6 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
 
         // Revert old crew status if it was EN_ROUTE
         try {
-            Crew oldCrew = current.getCrew();
             if (oldCrew.getStatus() == CrewStatus.EN_ROUTE) {
                 oldCrew.setStatus(CrewStatus.AVAILABLE);
                 crewRepo.save(oldCrew);
@@ -130,7 +156,24 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
             log.warn("Failed to revert old crew status: {}", e.getMessage());
         }
 
-        // Create new assignment
+        // Notify old crew that assignment was moved away
+        try {
+            FaultReport fault = current.getFaultReport();
+            notifyCrewMembers(oldCrew, "Task reassigned away",
+                    "The task for fault " + fault.getTrackingCode() + " has been reassigned to another crew.");
+        } catch (Exception e) {
+            log.warn("Old crew reassignment notification failed for crewId={}: {}", oldCrewId, e.getMessage());
+        }
+
+        // Audit old assignment
+        try {
+            auditLogService.log("FaultAssignment", current.getId(), "REASSIGN",
+                    "crewId=" + oldCrewId, "crewId=" + request.newCrewId());
+        } catch (Exception e) {
+            log.warn("Audit log failed for REASSIGN assignmentId={}: {}", current.getId(), e.getMessage());
+        }
+
+        // Create new assignment (also sends "New task assigned" notification to new crew)
         AssignCrewRequest newAssignRequest = new AssignCrewRequest(faultReportId, request.newCrewId(), request.note());
         return assignCrew(newAssignRequest, callerEmail);
     }
@@ -235,5 +278,13 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
             return "Crew location unknown — ranked by availability";
         }
         return String.format("%.1f km from fault location", distanceKm);
+    }
+
+    private void notifyCrewMembers(Crew crew, String title, String message) {
+        crewMemberRepo.findByCrewId(crew.getId()).forEach(member -> {
+            if (member.getUser() != null) {
+                notificationService.sendToUser(member.getUser().getId(), title, message, "ASSIGNMENT");
+            }
+        });
     }
 }

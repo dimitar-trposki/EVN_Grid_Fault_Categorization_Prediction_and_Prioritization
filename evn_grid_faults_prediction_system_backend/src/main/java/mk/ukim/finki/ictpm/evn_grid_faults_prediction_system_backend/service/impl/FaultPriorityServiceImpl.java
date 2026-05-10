@@ -17,6 +17,7 @@ import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enums
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultClassificationResultRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultPriorityRepository;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.repository.FaultReportRepository;
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.AuditLogService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.FaultPriorityService;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.service.WeatherService;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class FaultPriorityServiceImpl implements FaultPriorityService {
     private final WeatherService weatherService;
     private final AiClient aiClient;
     private final FaultPriorityMapper mapper;
+    private final AuditLogService auditLogService;
 
     @Override
     @Transactional
@@ -74,6 +76,8 @@ public class FaultPriorityServiceImpl implements FaultPriorityService {
         FaultPriorityRecord entity = priorityRepository.findByFaultReportId(faultReportId)
                 .orElseGet(FaultPriorityRecord::new);
 
+        FaultPriority oldLevel = entity.getPriorityLevel();
+
         if (entity.getFaultReport() == null) {
             entity.setFaultReport(fault);
         }
@@ -89,7 +93,16 @@ public class FaultPriorityServiceImpl implements FaultPriorityService {
         fault.setFaultPriority(req.priorityLevel());
         faultReportRepository.save(fault);
 
-        return mapper.toResponse(priorityRepository.save(entity));
+        FaultPriorityResponse result = mapper.toResponse(priorityRepository.save(entity));
+
+        try {
+            auditLogService.log("FaultPriority", entity.getId(), "PRIORITY_OVERRIDE",
+                    oldLevel != null ? oldLevel.name() : null, req.priorityLevel().name());
+        } catch (Exception e) {
+            log.warn("Audit log failed for PRIORITY_OVERRIDE faultId={}: {}", faultReportId, e.getMessage());
+        }
+
+        return result;
     }
 
     @Override
