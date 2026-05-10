@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dispatcher Central Dashboard | Industrial Authority</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary": "#ffffff",
+              "secondary-fixed": "#cbe7f5",
+              "primary-fixed": "#d6e3ff",
+              "on-tertiary": "#ffffff",
+              "surface-container-low": "#f2f4f6",
+              "inverse-primary": "#a9c7ff",
+              "on-primary-fixed-variant": "#0e4686",
+              "outline": "#737780",
+              "on-error": "#ffffff",
+              "on-surface": "#191c1e",
+              "tertiary": "#400a00",
+              "on-tertiary-fixed-variant": "#872000",
+              "on-primary-fixed": "#001b3d",
+              "tertiary-container": "#651600",
+              "background": "#f8f9fb",
+              "on-tertiary-fixed": "#3b0900",
+              "secondary": "#48626e",
+              "secondary-fixed-dim": "#afcbd8",
+              "outline-variant": "#c3c6d1",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed-dim": "#ffb5a0",
+              "surface-container": "#eceef0",
+              "surface-container-highest": "#e0e3e5",
+              "on-primary": "#ffffff",
+              "primary-fixed-dim": "#a9c7ff",
+              "surface-dim": "#d8dadc",
+              "error-container": "#ffdad6",
+              "on-error-container": "#93000a",
+              "on-background": "#191c1e",
+              "on-secondary-fixed": "#021f29",
+              "on-secondary-fixed-variant": "#304a55",
+              "on-secondary-container": "#4e6874",
+              "inverse-on-surface": "#eff1f3",
+              "primary": "#001e42",
+              "surface-container-high": "#e6e8ea",
+              "surface": "#f8f9fb",
+              "on-primary-container": "#729ce2",
+              "on-tertiary-container": "#ff6f46",
+              "error": "#ba1a1a",
+              "secondary-container": "#cbe7f5",
+              "primary-container": "#003368",
+              "tertiary-fixed": "#ffdbd1",
+              "surface-bright": "#f8f9fb",
+              "on-surface-variant": "#43474f",
+              "surface-variant": "#e0e3e5",
+              "inverse-surface": "#2d3133",
+              "surface-tint": "#305ea0"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+      }
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: #c3c6d1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface overflow-hidden">
+<!-- TopNavBar Implementation -->
+<header class="fixed top-0 w-full z-50 border-b border-slate-200/15 bg-white/80 backdrop-blur-md shadow-sm">
+<div class="flex justify-between items-center h-16 px-6 w-full">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold tracking-tighter text-blue-900">Industrial Authority</span>
+<nav class="hidden md:flex items-center gap-6 font-inter antialiased text-sm font-medium tracking-tight">
+<a class="text-blue-700 border-b-2 border-blue-700 pb-1" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-blue-800 transition-colors duration-200" href="#">Map</a>
+<a class="text-slate-500 hover:text-blue-800 transition-colors duration-200" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-md text-sm focus:ring-2 focus:ring-surface-tint focus:bg-surface-container-lowest transition-all" placeholder="Search grid assets..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-md transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-slate-100/50 rounded-md transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant/20">
+<img alt="Operator Profile Avatar" data-alt="professional portrait of a middle-aged male systems engineer in a clean industrial office environment with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH-GmwJSTU7UlGxafFPMhMvJS2K45MbzwQAKYqnvOZ4LNaxcimqYACWz1WvlZuNTcXzs23NpGGpbOi4Dz3T8gyKaLE8wlTObmMk7GuaCrLxytFeMzso1hVta4b0RjRCRGAXjZC7eFMHZM4PEBWr9-s5i4h5466Co1J8gb2DFMdbTTthmYuq393dqQfdyuJgZhqHSgnnSqxMUo46ugJjSnzLr9k6eS3Gq4SouLBU7aZgi6qQKmtAjg1JwZBdZKesUeTAUz4Bhcloath"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar Implementation -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-slate-50 flex flex-col py-6 px-4 gap-2 pt-20">
+<div class="mb-6 px-2">
+<h2 class="font-inter uppercase tracking-widest text-[10px] font-bold text-blue-800">Network Control</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="text-[10px] text-on-surface-variant font-medium">Grid Status: Nominal</span>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 bg-white text-blue-700 shadow-sm rounded-md my-1 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-200 rounded-md my-1 transition-all duration-200 ease-in-out hover:pl-4" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="map">map</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Fault Map</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-200 rounded-md my-1 transition-all duration-200 ease-in-out hover:pl-4" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="bolt">bolt</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Dispatch</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-200 rounded-md my-1 transition-all duration-200 ease-in-out hover:pl-4" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="group_work">group_work</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Field Crews</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-200 rounded-md my-1 transition-all duration-200 ease-in-out hover:pl-4" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assessment">assessment</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Reports</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-slate-200/50 space-y-1">
+<button class="w-full flex items-center justify-center gap-2 py-2.5 mb-4 bg-gradient-to-br from-primary to-primary-container text-white rounded-md text-[10px] font-bold uppercase tracking-widest shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+                New Fault Report
+            </button>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-200 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Help</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-500 hover:bg-slate-200 rounded-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="logout">logout</span>
+<span class="font-inter uppercase tracking-widest text-[10px] font-bold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-64 pt-16 h-screen w-full flex overflow-hidden">
+<!-- Left: Interactive Map Workspace -->
+<section class="flex-1 relative overflow-hidden bg-surface-dim">
+<div class="absolute inset-0 z-0">
+<img alt="High detail technical map" class="w-full h-full object-cover grayscale opacity-40 mix-blend-multiply" data-alt="detailed schematic satellite view of an urban power grid infrastructure with technical overlays and glowing terminal points" data-location="Chicago" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG7Uo-m8VUgsVB8nQLuu0LhJIGjMHW4JdNm2WjJjfTnIxIcqJqYN8Vfi0zgFU6K3LCKzl8reMvws5NqEvMeCtzlw3CRa0GkBVmyosHpTvldm78ScJnHorpJnJoYH2bMKfWPwEHCcf8rzvR0748_aSo1Z7QJSH3F03-aCRAk8uvAA583B9DqL-BSLbM0HZwabGsFt6yZpfp6RONC4HOKyiVBAh0-kowtvw1pfxrXw_bRzcRTPmYYNDPTViH78CTbGfEqC8wSqnVBzWW"/>
+<!-- Simulated UI Pins -->
+<div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="relative flex items-center justify-center">
+<div class="absolute w-12 h-12 bg-error/20 rounded-full animate-ping"></div>
+<div class="w-4 h-4 bg-error border-2 border-white rounded-full shadow-lg"></div>
+</div>
+</div>
+<div class="absolute bottom-1/4 left-1/3 z-10">
+<div class="w-4 h-4 bg-tertiary-container border-2 border-white rounded-full shadow-lg"></div>
+</div>
+<div class="absolute top-1/4 right-1/4 z-10">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">electric_bolt</span>
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Floating Map Overlays -->
+<div class="absolute top-6 left-6 z-20 flex flex-col gap-4">
+<div class="glass-panel p-4 rounded-xl shadow-2xl border border-white/20 w-64">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-[10px] font-bold uppercase tracking-widest text-on-surface">Weather Layer</h3>
+<span class="material-symbols-outlined text-sm text-secondary">cloud</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Wind Speed</span>
+<span class="text-xs font-bold">24 km/h</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-on-surface-variant">Precipitation</span>
+<span class="text-xs font-bold text-error">Severe</span>
+</div>
+<div class="h-1 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-error w-3/4"></div>
+</div>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl shadow-2xl border border-white/20 w-64">
+<h3 class="text-[10px] font-bold uppercase tracking-widest text-on-surface mb-4">Grid Zones</h3>
+<div class="flex gap-2">
+<button class="px-2 py-1 bg-primary text-white text-[10px] font-bold rounded-sm">ZONE A</button>
+<button class="px-2 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded-sm">ZONE B</button>
+<button class="px-2 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded-sm">ZONE C</button>
+</div>
+</div>
+</div>
+<!-- AI Risk Alert Bottom Banner -->
+<div class="absolute bottom-6 left-6 right-6 z-20">
+<div class="glass-panel p-4 rounded-xl shadow-2xl border-l-4 border-l-tertiary-container border border-white/20 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-tertiary-fixed flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<div>
+<p class="text-[10px] font-bold uppercase tracking-widest text-tertiary-container">AI Risk Assessment</p>
+<p class="text-sm font-medium text-on-surface">Predictive model suggests 84% failure probability in Sector 4G within 2 hours due to thermal load.</p>
+</div>
+</div>
+<button class="px-4 py-2 bg-tertiary-container text-white text-xs font-bold rounded-md hover:opacity-90 transition-opacity">Deploy Preventive Crew</button>
+</div>
+</div>
+</section>
+<!-- Right: Active Faults Sidebar -->
+<section class="w-[420px] bg-white border-l border-outline-variant/15 flex flex-col z-30 shadow-2xl">
+<div class="p-6 border-b border-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold tracking-tight text-primary">Active Faults</h2>
+<span class="bg-surface-container-high text-on-surface-variant text-[10px] font-bold px-2 py-1 rounded-full">14 UNRESOLVED</span>
+</div>
+<!-- Quick Filters -->
+<div class="flex gap-2">
+<button class="flex-1 py-2 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-md">Critical</button>
+<button class="flex-1 py-2 bg-surface-container-low text-on-surface-variant text-[10px] font-bold uppercase tracking-widest rounded-md hover:bg-surface-container-high transition-colors">Unassigned</button>
+<button class="flex-1 py-2 bg-surface-container-low text-on-surface-variant text-[10px] font-bold uppercase tracking-widest rounded-md hover:bg-surface-container-high transition-colors">Pending</button>
+</div>
+</div>
+<!-- Fault List Container -->
+<div class="flex-1 overflow-y-auto p-4 space-y-3">
+<!-- Fault Item 1 (Critical) -->
+<div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/10 hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-1 bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-wider rounded-sm">Priority: 9.8</span>
+<span class="text-[10px] text-on-surface-variant font-medium">12m ago</span>
+</div>
+<h4 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Substation #0482 – Phase Imbalance</h4>
+<p class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                        North Industrial District, Sector 7
+                    </p>
+<div class="mt-4 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-300"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-400"></div>
+</div>
+<button class="text-[10px] font-bold text-primary-container uppercase tracking-widest hover:underline">Dispatch Crew</button>
+</div>
+</div>
+<!-- Fault Item 2 (Warning) -->
+<div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/10 hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold uppercase tracking-wider rounded-sm">Priority: 7.2</span>
+<span class="text-[10px] text-on-surface-variant font-medium">34m ago</span>
+</div>
+<h4 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Feeder Line X-90 Leakage</h4>
+<p class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                        Residential Zone 3, Oak St
+                    </p>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-[10px] font-bold text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">engineering</span>
+                            Crew #12 En-Route
+                        </span>
+<button class="text-[10px] font-bold text-primary-container uppercase tracking-widest hover:underline">Details</button>
+</div>
+</div>
+<!-- Fault Item 3 (Medium) -->
+<div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/10 hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-wider rounded-sm">Priority: 4.5</span>
+<span class="text-[10px] text-on-surface-variant font-medium">1h 04m ago</span>
+</div>
+<h4 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Transformer T-09 Overheat</h4>
+<p class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                        Harbor Port South
+                    </p>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Unassigned</span>
+<button class="text-[10px] font-bold text-primary-container uppercase tracking-widest hover:underline">Dispatch Crew</button>
+</div>
+</div>
+<!-- Fault Item 4 (Critical) -->
+<div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/10 hover:bg-surface-container-low transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="px-2 py-1 bg-error-container text-on-error-container text-[10px] font-bold uppercase tracking-wider rounded-sm">Priority: 9.1</span>
+<span class="text-[10px] text-on-surface-variant font-medium">2h 12m ago</span>
+</div>
+<h4 class="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">Major Main Breaker Trip</h4>
+<p class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">location_on</span>
+                        Central Business Hub
+                    </p>
+<div class="mt-4 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-500"></div>
+</div>
+<button class="text-[10px] font-bold text-primary-container uppercase tracking-widest hover:underline">View Stream</button>
+</div>
+</div>
+</div>
+<!-- Footer Legend/Stats -->
+<div class="p-4 bg-surface-container-low border-t border-outline-variant/10">
+<div class="grid grid-cols-2 gap-4">
+<div class="text-center p-3 bg-white rounded-lg">
+<p class="text-[10px] font-bold uppercase text-on-surface-variant mb-1">Crews Active</p>
+<p class="text-xl font-bold text-primary">28 / 32</p>
+</div>
+<div class="text-center p-3 bg-white rounded-lg">
+<p class="text-[10px] font-bold uppercase text-on-surface-variant mb-1">Avg Response</p>
+<p class="text-xl font-bold text-secondary">14.2 min</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>
