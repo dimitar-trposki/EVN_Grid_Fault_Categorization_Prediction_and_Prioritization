@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: evn_db
+    environment:
+      POSTGRES_DB: evn_grid_db
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres} -d evn_grid_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ai-service:
+    build:
+      context: ./ai-service
+    container_name: evn_ai_service
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/docs')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  backend:
+    build:
+      context: ./evn_grid_faults_prediction_system_backend
+    container_name: evn_backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/evn_grid_db
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - CORS_ALLOWED_ORIGIN=http://localhost:3000
+      - AI_SERVICE_BASE_URL=http://ai-service:8000
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_FLYWAY_ENABLED=false
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./evn_grid_faults_prediction_system_frontend
+      args:
+        - VITE_API_BASE_URL=http://localhost:8080/api
+    container_name: evn_frontend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8080/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
