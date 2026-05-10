@@ -1,11 +1,10 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import authRepository from '../api/authRepository';
-
-const AuthContext = createContext(null);
+import { AuthContext } from './authStore';
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(() => Boolean(localStorage.getItem('token')));
 
     const mapAuthPayloadToUser = (payload) => ({
         userId: payload.userId,
@@ -17,14 +16,28 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            authRepository.getProfile()
-                .then(res => setUser(res.data))
-                .catch(() => localStorage.removeItem('token'))
-                .finally(() => setLoading(false));
-        } else {
-            setLoading(false);
+        if (!token) {
+            return;
         }
+
+        let isMounted = true;
+
+        authRepository.getProfile()
+            .then((res) => {
+                if (isMounted) {
+                    setUser(res.data);
+                }
+            })
+            .catch(() => localStorage.removeItem('token'))
+            .finally(() => {
+                if (isMounted) {
+                    setLoading(false);
+                }
+            });
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     const login = async (credentials) => {
@@ -53,5 +66,3 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
-
-export const useAuth = () => useContext(AuthContext);
