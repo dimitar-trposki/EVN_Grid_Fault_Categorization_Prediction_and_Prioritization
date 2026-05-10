@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/authStore';
 import { useNavigate } from 'react-router-dom';
 import dashboardRepository from '../../api/dashboardRepository';
+import Navbar from '../../components/Navbar';
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
@@ -51,18 +52,7 @@ const DashboardPage = () => {
 
     return (
         <div style={styles.container}>
-            {/* Navbar */}
-            <nav style={styles.navbar}>
-                <h1 style={styles.logo}>⚡ EVN Grid System</h1>
-                <div style={styles.navRight}>
-          <span style={styles.welcome}>
-            Welcome, {user?.firstName || 'User'}
-          </span>
-                    <button style={styles.logoutBtn} onClick={handleLogout}>
-                        Logout
-                    </button>
-                </div>
-            </nav>
+            <Navbar />
 
             <div style={styles.content}>
                 {/* Stats Cards */}
@@ -172,6 +162,14 @@ const styles = {
         border: 'none',
         backgroundColor: '#ef4444',
         color: 'white',
+        cursor: 'pointer',
+    },
+    navLinkBtn: {
+        padding: '0.5rem 1rem',
+        borderRadius: '8px',
+        border: '1px solid #c084fc',
+        backgroundColor: 'transparent',
+        color: '#c084fc',
         cursor: 'pointer',
     },
     content: {
