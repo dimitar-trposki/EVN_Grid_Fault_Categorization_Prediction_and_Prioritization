@@ -7,6 +7,14 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const mapAuthPayloadToUser = (payload) => ({
+        userId: payload.userId,
+        email: payload.email,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        role: payload.role,
+    });
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -22,7 +30,14 @@ export const AuthProvider = ({ children }) => {
     const login = async (credentials) => {
         const res = await authRepository.login(credentials);
         localStorage.setItem('token', res.data.token);
-        setUser(res.data.user);
+        setUser(mapAuthPayloadToUser(res.data));
+        return res.data;
+    };
+
+    const register = async (formData) => {
+        const res = await authRepository.register(formData);
+        localStorage.setItem('token', res.data.token);
+        setUser(mapAuthPayloadToUser(res.data));
         return res.data;
     };
 
@@ -33,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
             {!loading && children}
         </AuthContext.Provider>
     );

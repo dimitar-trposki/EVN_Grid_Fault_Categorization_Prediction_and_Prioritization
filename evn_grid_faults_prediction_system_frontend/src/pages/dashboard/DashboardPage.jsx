@@ -14,7 +14,7 @@ const DashboardPage = () => {
         const fetchData = async () => {
             try {
                 const [statsRes, faultsRes] = await Promise.all([
-                    dashboardRepository.getStats(),
+                    dashboardRepository.getKpis(),
                     dashboardRepository.getActiveFaults(),
                 ]);
                 setStats(statsRes.data);
@@ -69,7 +69,7 @@ const DashboardPage = () => {
                 <div style={styles.statsGrid}>
                     <div style={styles.statCard}>
                         <p style={styles.statLabel}>Active Faults</p>
-                        <h2 style={styles.statValue}>{stats?.activeFaults ?? '—'}</h2>
+                        <h2 style={styles.statValue}>{stats?.totalActiveFaults ?? '—'}</h2>
                     </div>
                     <div style={styles.statCard}>
                         <p style={styles.statLabel}>Critical</p>
@@ -80,13 +80,13 @@ const DashboardPage = () => {
                     <div style={styles.statCard}>
                         <p style={styles.statLabel}>Crews Active</p>
                         <h2 style={{ ...styles.statValue, color: '#22c55e' }}>
-                            {stats?.activeCrews ?? '—'}
+                            {stats?.crewsActive ?? '—'}
                         </h2>
                     </div>
                     <div style={styles.statCard}>
                         <p style={styles.statLabel}>Avg Response</p>
                         <h2 style={styles.statValue}>
-                            {stats?.avgResponseTime ?? '—'} min
+                            {stats?.avgResponseTimeMin ? Math.round(stats.avgResponseTimeMin) : '—'} min
                         </h2>
                     </div>
                 </div>
@@ -110,18 +110,18 @@ const DashboardPage = () => {
                             <tbody>
                             {activeFaults.map((fault) => (
                                 <tr key={fault.id} style={styles.tr}>
-                                    <td style={styles.td}>{fault.reportCode}</td>
-                                    <td style={styles.td}>{fault.locationAddress}</td>
-                                    <td style={styles.td}>{fault.faultType}</td>
+                                    <td style={styles.td}>{fault.id}</td>
+                                    <td style={styles.td}>{`${fault.latitude?.toFixed?.(4) ?? '—'}, ${fault.longitude?.toFixed?.(4) ?? '—'}`}</td>
+                                    <td style={styles.td}>{fault.faultTypeName ?? '—'}</td>
                                     <td style={styles.td}>
                       <span style={{
                           ...styles.badge,
-                          backgroundColor: getPriorityColor(fault.priority),
+                          backgroundColor: getPriorityColor(fault.priorityLevel),
                       }}>
-                        {fault.priority}
+                        {fault.priorityLevel ?? 'N/A'}
                       </span>
                                     </td>
-                                    <td style={styles.td}>{fault.status}</td>
+                                    <td style={styles.td}>{fault.status ?? '—'}</td>
                                 </tr>
                             ))}
                             </tbody>
