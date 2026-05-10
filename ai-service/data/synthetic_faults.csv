@@ -1,0 +1,501 @@
+﻿description,category,severity,safety_risk
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+"Tree growing close to wire near Лисиче, just flagging it",OTHER,LOW,False
+"Pole slightly tilted near Нерези, needs inspection",MECHANICAL,MEDIUM,False
+"Smoke from electrical cabinet near Ѓуро Стругар, around 5 alarmed residents emergency!",ELECTRICAL,HIGH,True
+"App slightly slower than usual, minor performance issue",SOFTWARE,LOW,False
+"Загубивме читање од 19 бројачи во Кисела Вода, неколку часа без податок",NETWORK,HIGH,False
+Анкерот на столбот е ослабнат по последните дождови,MECHANICAL,MEDIUM,False
+"Fire visible near power line on Питу Гули, unidentified origin, please send crew",OTHER,CRITICAL,True
+Столбот е малку поместен – можеби го удрило возило,MECHANICAL,MEDIUM,False
+Animal (куче?) found stuck near transformer at Центар,OTHER,MEDIUM,False
+"Гулаб направил гнездо во ормарот, дали е проблем?",OTHER,MEDIUM,False
+Столбот е малку поместен – можеби го удрило возило,MECHANICAL,MEDIUM,False
+Application crashes when filtering faults by date range,SOFTWARE,MEDIUM,False
+"Жива жица паднала на Борис Кидрич по бурата, луѓе наоколу, ИТНО!!!",MECHANICAL,CRITICAL,True
+"RTU на ТС Центар не одговара воопшто, немаме никаква телеметрија!",NETWORK,CRITICAL,False
+"Жицата скинала по ветерот, виси многу ниско над Гоце Делчев – опасно!",MECHANICAL,CRITICAL,False
+"All RTUs offline simultaneously, zero telemetry from any point in the grid",NETWORK,CRITICAL,False
+"Трансформаторот малку вибрира, не е нова состојба",MECHANICAL,LOW,False
+"Трафо Т-208 gori, искри летаат, соседите бегаат!!!",ELECTRICAL,CRITICAL,True
+"Date format incorrect in exported reports, wrong locale",SOFTWARE,LOW,False
+Бројачот за струја прави чуден звук кај нас,ELECTRICAL,MEDIUM,False
+"Диспечерскиот dashboard целосно не работи, не можеме да управуваме!",SOFTWARE,CRITICAL,False
+"Светлото во подземна гаража не работи, може полека",ELECTRICAL,LOW,False
+"Прекин кај 100 домаќинства на Васил Ѓоргов, средна зона",ELECTRICAL,MEDIUM,False
+Телеметријата со Т-512 го губи пакет еднаш на час,NETWORK,MEDIUM,False
+Падна столб од далекуводот по бурата кај Арачиново помогнете!,MECHANICAL,HIGH,False
+"Complete SCADA failure, dispatchers operating blind, all substations unreachable",NETWORK,CRITICAL,False
+"Нешто изгледа различно кај ормарот на Видое Смилевски, не знам точно",OTHER,LOW,False
+"Мирис на горење и чад, не знам дали е струја, ве молам итно!",OTHER,CRITICAL,True
+RTU at Т-301 dropping packets intermittently since last night,NETWORK,MEDIUM,False
+"Lights flickering all evening, cannot identify cause",ELECTRICAL,MEDIUM,False
+"Circuit breaker keeps tripping, replaced fuse twice already",ELECTRICAL,MEDIUM,False
+"Комуникациска грешка, сама се поправила, само пријавувам",NETWORK,LOW,False
+"Tree branch hit power line on Питу Гули, line sagging dangerously low",MECHANICAL,HIGH,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+"Collapsed pole near school on Страшо Пинџур, immediate danger to children",MECHANICAL,CRITICAL,False
+"Загуба на пакети кај RTU на Т-117, мрежата нестабилна",NETWORK,MEDIUM,False
+"Telemetry врска изгубена со ТС Чаир, не можеме да мониторираме",NETWORK,HIGH,False
+Fault list only shows 10 rows regardless of filter settings,SOFTWARE,MEDIUM,False
+"Жива жица виси до детско игралиште кај Бутел, итно!!!",OTHER,CRITICAL,True
+Transformer Т-208 buzzing loudly and smells of burning URGENT!,ELECTRICAL,HIGH,False
+"Sensor B-212 sending garbage data, suspected hardware failure",NETWORK,HIGH,False
+"Нешто чудно кај мерачот, не знам дали е нормално",OTHER,MEDIUM,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+Password reset link expired immediately after generation,SOFTWARE,MEDIUM,False
+Slightly higher meter reading than usual this month,ELECTRICAL,LOW,False
+"Button visually misaligned in UI, cosmetic only",SOFTWARE,LOW,False
+Password reset link expired immediately after generation,SOFTWARE,MEDIUM,False
+"Dispatch interface not loading, blank screen after login",SOFTWARE,HIGH,False
+Smoke and smell of горена пластика near electrical cabinet on Гоце Делчев,OTHER,HIGH,True
+"Жарулјата во ходникот на зградата изгорела, ситница е",ELECTRICAL,LOW,False
+Уличното светло не работи на ул. Питу Гули бр.14,ELECTRICAL,LOW,False
+"Мала задоцнетост во телеметријата, не е итно",NETWORK,LOW,False
+Не можам да се логирам во системот – вратата блокирана,SOFTWARE,HIGH,False
+"Гори нешто кај далекуводот, не знам точно, дојдете итно!!!",OTHER,CRITICAL,False
+"Гола жица виси од дистрибутивниот ормар на Јован Котески, ИТНО! молам брзо!",ELECTRICAL,HIGH,True
+Паметниот бројач бројач 9920145 не испраќа податоци 5 дена,NETWORK,MEDIUM,False
+"Вандализам на знакот кај трафостаницата – само боја, нема штета",OTHER,LOW,False
+"Бандерата е оштетена, боја одрнала, треба проверка",MECHANICAL,MEDIUM,False
+Не можам да се логирам во системот – вратата блокирана,SOFTWARE,HIGH,False
+Струјата исклучена во повеќе блокови во Карпош – 20 семејства засегнати молам брзо!,ELECTRICAL,HIGH,False
+Multiple buildings in Дексион lost power after last night's storm,ELECTRICAL,HIGH,False
+Water inside cable cabinet after heavy rain on Јован Котески,OTHER,MEDIUM,False
+Комуникацијата со ТС Гази Баба прекината по надградбата утрово,NETWORK,HIGH,False
+"Стар кабел видлив на Јован Котески, не знам дали е под напон",OTHER,MEDIUM,True
+"Лозинката не може да се смени, копчето не реагира",SOFTWARE,MEDIUM,False
+Дрво гранка се потпира на жица кај Сопишта,MECHANICAL,MEDIUM,False
+Осигурувачот постојано гори во блокот на Гоце Делчев,ELECTRICAL,MEDIUM,True
+"Гранки растат блиску до жиците на Питу Гули, може да е проблем",OTHER,MEDIUM,False
+"RTU at ТС Центар unresponsive, cannot send commands",NETWORK,HIGH,False
+"Жива жица виси до детско игралиште кај Визбегово, итно!!!",OTHER,CRITICAL,True
+"Комуникациски проблем со SCADA, повеќе уреди недостапни",NETWORK,HIGH,False
+"Нема струја во цело маало Дексион од 19:30ч, повеќе блока засегнати помогнете!",ELECTRICAL,HIGH,False
+"Мала задоцнетост во телеметријата, не е итно",NETWORK,LOW,False
+Струја доаѓа и оди на секои неколку минути – деловниот објект на Кочо Рацин,ELECTRICAL,MEDIUM,False
+"Explosion at substation ТС Аеродром, fire spreading fast, emergency services called!",ELECTRICAL,CRITICAL,True
+"Прекин кај 10 домаќинства на Јован Котески, средна зона",ELECTRICAL,MEDIUM,False
+"Гулаб направил гнездо во ормарот, дали е проблем?",OTHER,MEDIUM,False
+Дрво гранка се потпира на жица кај Студеничани,MECHANICAL,MEDIUM,False
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+Струја доаѓа и оди на секои неколку минути – зградата на Македонија,ELECTRICAL,MEDIUM,False
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+Чуден мирис од денес наутро кај трансформаторот – не знам причина,OTHER,MEDIUM,False
+"Стар кабел видлив на Климент Охридски, не знам дали е под напон",OTHER,MEDIUM,True
+"Neighbourhood Ѓорче Петров without power for 3 hours, no update",ELECTRICAL,HIGH,False
+RTU at Т-208 dropping packets intermittently since yesterday evening,NETWORK,MEDIUM,False
+"Еден светилник на Видое Смилевски не работи, само информирам",ELECTRICAL,LOW,False
+"По невремето синоќа, три столба скршени на Цветан Димов",MECHANICAL,HIGH,False
+"Картата во апликацијата не се вчитува, само врти тркало",SOFTWARE,MEDIUM,False
+Трансформаторската кутија е физички оштетена на Илинденска,MECHANICAL,MEDIUM,False
+Паметниот бројач бројач 4471203 не испраќа податоци 12 дена,NETWORK,MEDIUM,False
+"Meter readings not updating, suspected connection issue",NETWORK,MEDIUM,False
+Падна столб од далекуводот по бурата кај Арачиново,MECHANICAL,HIGH,False
+"Minor crack in base of pole on Васил Ѓоргов, cosmetic only",OTHER,LOW,False
+Трансформаторот на Васил Ѓоргов вибрира повеќе отколку обично,MECHANICAL,MEDIUM,False
+Уличната ламба на Илинденска изгасена веќе неколку дена,ELECTRICAL,LOW,False
+"Ticket creation blocked by server error, operators cannot log faults",SOFTWARE,HIGH,False
+"Кабелскиот ормар е со скршена врата, изложени жици внатре",MECHANICAL,MEDIUM,False
+"Dispatch center without any grid data for 4 hours, EMERGENCY",NETWORK,CRITICAL,False
+"Светлото во подземна гаража не работи, може полека",ELECTRICAL,LOW,False
+"App slightly slower than usual, minor performance issue",SOFTWARE,LOW,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+Чуден мирис попладне кај трансформаторот – не знам причина,OTHER,MEDIUM,False
+"Нема струја во станот на Видое Смилевски од 01:00ч, веќе 18 часа",ELECTRICAL,MEDIUM,False
+Smoke and smell of чад near electrical cabinet on Васил Ѓоргов,OTHER,HIGH,True
+"Столб оштетен во сообраќајка на Кочо Рацин, жиците нестабилни",MECHANICAL,HIGH,False
+"Светлото трепери во станот, не престанува веќе 24 часа",ELECTRICAL,MEDIUM,False
+"Something looks different near cabinet on Кочо Рацин, cannot tell what",OTHER,LOW,False
+Сензор T-409 испраќа грешни вредности – дефект верувам,NETWORK,HIGH,False
+Bird built nest inside open cabinet near Орце Николов,OTHER,MEDIUM,False
+"Transformer vibrating slightly more than usual, low concern",MECHANICAL,LOW,False
+Голема искра од трафо станицата ТС Скопје Север на ул. Кочо Рацин ИТНО!!!,ELECTRICAL,HIGH,True
+Поврзувањето со Т-117 паѓа и се враќа на секој час,NETWORK,MEDIUM,False
+"Sensor M-118 sending garbage data, suspected hardware failure",NETWORK,HIGH,False
+Поврзувањето со ТС Центар паѓа и се враќа на секој час,NETWORK,MEDIUM,False
+Уличната ламба на Климент Охридски изгасена веќе неколку дена,ELECTRICAL,LOW,False
+Сензор R-305 испраќа грешни вредности – дефект верувам,NETWORK,HIGH,False
+"Meter readings not updating, suspected connection issue",NETWORK,MEDIUM,False
+"Жицата прави мал звук при ветер, обично е тивка",MECHANICAL,LOW,False
+Струјата се исклучува и вклучува неколку пати на час,ELECTRICAL,MEDIUM,False
+Осигурувачот постојано гори во зградата на Орце Николов,ELECTRICAL,MEDIUM,True
+"Customer portal freezes on the submit button, cannot file reports",SOFTWARE,MEDIUM,False
+"Неколку приклучоци мртви во станот, останатите работат",ELECTRICAL,MEDIUM,False
+Сензорот A-440 имаше неколку исклучувања синоќа,NETWORK,MEDIUM,False
+Animal (птица?) found stuck near transformer at Дексион,OTHER,MEDIUM,False
+"Вандализам на знакот кај трафостаницата – само боја, нема штета",OTHER,LOW,False
+"Порталот за пријава не прима барања наутро, сите испорачувачи блокирани",SOFTWARE,HIGH,False
+"Кабелот виси ниско кај Скупи бр.7, автобусите тешко минуваат молам брзо!",MECHANICAL,HIGH,False
+"Auto-reclosing software unresponsive, grid safety at risk",SOFTWARE,CRITICAL,False
+Осигурувачот постојано гори во блокот на Климент Охридски,ELECTRICAL,MEDIUM,True
+"По невремето синоќа, три столба скршени на Васил Ѓоргов помогнете!",MECHANICAL,HIGH,False
+Трансформаторот на Скупи вибрира повеќе отколку обично,MECHANICAL,MEDIUM,False
+"RTU на ТС Гази Баба не одговара воопшто, немаме никаква телеметрија!",NETWORK,CRITICAL,False
+"Светлото трепери во станот, не престанува веќе 2 часа",ELECTRICAL,MEDIUM,False
+"Meter sync delay, minor and intermittent",NETWORK,LOW,False
+"Tree branch resting on wire near Чаир, could snap in wind",MECHANICAL,MEDIUM,False
+"Еден приклучок не работи, останатите добри",ELECTRICAL,LOW,False
+"Неколку приклучоци мртви во станот, останатите работат",ELECTRICAL,MEDIUM,False
+"Гола жица виси од дистрибутивниот ормар на Васил Ѓоргов, ИТНО! ИТНО!!!",ELECTRICAL,HIGH,True
+Системот не дозволува отварање нови тикети – блокирани сме,SOFTWARE,HIGH,False
+Скршена скоба на конзолата на бандерата кај Дексион,MECHANICAL,MEDIUM,False
+"Cable looks slightly worn near Побожје, just for records",MECHANICAL,LOW,False
+"Minor rust on pole on Македонија, not urgent",MECHANICAL,LOW,False
+Power outage in single building since since early morning,ELECTRICAL,MEDIUM,False
+"Соседите се жалат на некоја бучава, не сум сигурен на што",OTHER,MEDIUM,False
+No electricity in apartment on Страшо Пинџур number 16,ELECTRICAL,MEDIUM,False
+"Мирис на горење и чад, не знам дали е струја, ве молам итно!",OTHER,CRITICAL,True
+"Жица паднала на playground во Дексион, деца евакуирани, ИТНО!!!",MECHANICAL,CRITICAL,False
+Апликацијата паѓа кога ќе се филтрираат дефекти по датум,SOFTWARE,MEDIUM,False
+"Напон нема на Македонија бр.57 до бр.63, многу семејства",ELECTRICAL,HIGH,False
+"Картата во апликацијата не се вчитува, само врти тркало",SOFTWARE,MEDIUM,False
+"Гола жица виси од дистрибутивниот ормар на Илинденска, ИТНО!",ELECTRICAL,HIGH,True
+Smart meter паметен бројач №8812 not reporting data for 4 days,NETWORK,MEDIUM,False
+"Мала пукнатина на бетонската основа на столбот, козметичко",OTHER,LOW,False
+"Силен мирис на горено кај трансформаторот, пожар можен – ИТНО!",OTHER,CRITICAL,True
+"Напон нема на Гоце Делчев бр.36 до бр.55, многу семејства помогнете!",ELECTRICAL,HIGH,False
+Unknown person tampering with electrical cabinet on Илинденска at night,OTHER,HIGH,False
+"Customer portal freezes on the submit button, cannot file reports",SOFTWARE,MEDIUM,False
+"Pole slightly tilted near Радишани, needs inspection",MECHANICAL,MEDIUM,False
+Болницата нема струја веќе 6 часа – животоподдржувачи на батерии! ИТНО!,ELECTRICAL,CRITICAL,True
+"Паѓа напонот секое вечер околу 07:00ч, уредите се исклучуваат",ELECTRICAL,MEDIUM,False
+"Бандера накривена, бурата е виновна кај Радишани ИТНО!!!",MECHANICAL,HIGH,False
+"Not sure if this is an issue, reporting just in case – odd sound near Кочо Рацин",OTHER,LOW,False
+"App slightly slower than usual, minor performance issue",SOFTWARE,LOW,False
+"Детето ми рекло дека видело искра кај ормарот, но не сум сигурен",OTHER,MEDIUM,True
+"Комуникациска грешка, сама се поправила, само пријавувам",NETWORK,LOW,False
+Сензорот T-409 имаше неколку исклучувања синоќа,NETWORK,MEDIUM,False
+"Sparks observed near cable box on Васил Ѓоргов, source unclear emergency!",OTHER,HIGH,True
+"Столбот е накривен на Гоце Делчев бр.120, не е паднат уште",MECHANICAL,MEDIUM,False
+"Вандализам на трафостаницата кај Сарај – скршена врата, изложена внатрешност",OTHER,HIGH,False
+Напонот паѓа кога ке вклучам клима или шпорет,ELECTRICAL,MEDIUM,False
+"Загуба на пакети кај RTU на ТС Гази Баба, мрежата нестабилна",NETWORK,MEDIUM,False
+"Вандализам на знакот кај трафостаницата – само боја, нема штета",OTHER,LOW,False
+"Неколку приклучоци мртви во станот, останатите работат",ELECTRICAL,MEDIUM,False
+Голем пожар кај трафостаницата Т-512 – пожарникарите се веќе на пат!,ELECTRICAL,CRITICAL,True
+Апликацијата за пријавување дефекти падна по ажурирањето,SOFTWARE,HIGH,False
+"Искри и чад од кабелскиот ормар во Бутел, оштетен трансформатор",ELECTRICAL,HIGH,True
+"Едно копче е на погрешно место – UI проблем, не итно",SOFTWARE,LOW,False
+"App slightly slower than usual, minor performance issue",SOFTWARE,LOW,False
+"Лозинката не може да се смени, копчето не реагира",SOFTWARE,MEDIUM,False
+"Вандализам на трафостаницата кај Ѓорче Петров – скршена врата, изложена внатрешност ургентно!",OTHER,HIGH,False
+"Sparks from transformer ТС Карпош on Македонија, large area dark",ELECTRICAL,HIGH,True
+Password reset link expired immediately after generation,SOFTWARE,MEDIUM,False
+Cable bracket damaged on pole on Даме Груев,MECHANICAL,MEDIUM,False
+Апликацијата паѓа кога ќе се филтрираат дефекти по датум,SOFTWARE,MEDIUM,False
+Electricity cuts in and out every few minutes,ELECTRICAL,MEDIUM,False
+"Комуникациска грешка, сама се поправила, само пријавувам",NETWORK,LOW,False
+Прекинувачот кај Орце Николов бр.107 не работи правилно,ELECTRICAL,MEDIUM,False
+"Downed wire on Цветан Димов, possibly energized, area cordoned off",MECHANICAL,HIGH,True
+Анкерот на столбот е ослабнат по последните дождови,MECHANICAL,MEDIUM,False
+"Трансформаторот малку вибрира, не е нова состојба",MECHANICAL,LOW,False
+"Листата на дефекти не се прикажува правилно, само 10 редови",SOFTWARE,MEDIUM,False
+Столб се наклонил опасно по силниот ветер кај Бутел ургентно!,MECHANICAL,HIGH,False
+Преводот на македонски е погрешен на некои места,SOFTWARE,LOW,False
+"Жицата прави мал звук при ветер, обично е тивка",MECHANICAL,LOW,False
+"Напонот многу низок, сијалиците светат слабо",ELECTRICAL,MEDIUM,False
+"Грешка во dispatcher dashboard, не се вчитува воопшто",SOFTWARE,HIGH,False
+"Downed wire on Цветан Димов, possibly energized, people staying away",MECHANICAL,HIGH,True
+Датумот во извештајот е во погрешен формат,SOFTWARE,LOW,False
+RTU at Т-208 dropping packets intermittently since since noon,NETWORK,MEDIUM,False
+"Извозот на PDF не работи, добивам празен документ",SOFTWARE,MEDIUM,False
+"Communication with Т-512 slow, high latency on all commands",NETWORK,MEDIUM,False
+Cable bracket damaged on pole on Скупи,MECHANICAL,MEDIUM,False
+"Minor rust on pole on Илинденска, not urgent",MECHANICAL,LOW,False
+Случаен минувач запрашал за столбот – само пријавувам,OTHER,LOW,False
+"Возило удрило во ограда на трафорстаница, нема видлива штета",OTHER,MEDIUM,False
+"Мала задоцнетост во телеметријата, не е итно",NETWORK,LOW,False
+"Бандерата на Орце Николов бр.14 малку изгорена, не е итно",MECHANICAL,LOW,False
+"Трансформаторот малку вибрира, не е нова состојба",MECHANICAL,LOW,False
+Прекинувачот кај Орце Николов бр.7 не работи правилно,ELECTRICAL,MEDIUM,False
+Телеметријата со ТС Скопје Север го губи пакет еднаш на час,NETWORK,MEDIUM,False
+"Дрво притиска на жиците кај Арачиново, можен прекин",MECHANICAL,HIGH,False
+Столбот е малку поместен – можеби го удрило возило,MECHANICAL,MEDIUM,False
+Smoke and smell of хемикалии near electrical cabinet on Страшо Пинџур,OTHER,HIGH,True
+Лице беше видено да манипулира со ормар на Македонија навечер молам брзо!,OTHER,HIGH,False
+Апликацијата паѓа кога ќе се филтрираат дефекти по датум,SOFTWARE,MEDIUM,False
+"Рѓа на столбот, само козметичка штета, нема ризик",MECHANICAL,LOW,False
+"Соседите се жалат на некоја бучава, не сум сигурен на што",OTHER,MEDIUM,False
+"Tree branch resting on wire near Гази Баба, could snap in wind",MECHANICAL,MEDIUM,False
+Сензорот S-201 имаше неколку исклучувања синоќа,NETWORK,MEDIUM,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+Multiple buildings in Гази Баба lost power after last night's storm URGENT!,ELECTRICAL,HIGH,False
+"One flickering lamp on Орце Николов, nothing urgent",ELECTRICAL,LOW,False
+"Meter sync delay, minor and intermittent",NETWORK,LOW,False
+"Meter sync delay, minor and intermittent",NETWORK,LOW,False
+Smart meter бројач 4471203 not reporting data for 1 days,NETWORK,MEDIUM,False
+"Strong burning smell near cable cabinet on Македонија, possible fire URGENT",OTHER,CRITICAL,True
+"Мирис на горење и чад, не знам дали е струја, ве молам итно!",OTHER,CRITICAL,True
+Столбот е малку поместен – можеби го удрило возило,MECHANICAL,MEDIUM,False
+Sensor D-007 had multiple dropouts last night,NETWORK,MEDIUM,False
+Бројачот за стуја прави чуден звук кај нас,ELECTRICAL,MEDIUM,False
+Не примам податоци од сензор C-099 на трафо ТС Аеродром веќе 8 часа,NETWORK,HIGH,False
+Чуден силен звук од трафото ТС Чаир – непознат извор,OTHER,HIGH,False
+"Кабелот во подрумот е ороден, треба замена",ELECTRICAL,MEDIUM,False
+Напонот паѓа кога ке вклучам клима или шпорет,ELECTRICAL,MEDIUM,False
+Формата за пријава не праќа е-маил потврда,SOFTWARE,MEDIUM,False
+Нема напон на целата ул. Илинденска – исклучено синоќа молам брзо!,ELECTRICAL,HIGH,False
+Порталот за клиенти замрзнува на копчето за поднесување,SOFTWARE,MEDIUM,False
+Читањата на бројач 4471203 не се ажурираат редовно,NETWORK,MEDIUM,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+"Tree branch resting on wire near Сарај, could snap in wind",MECHANICAL,MEDIUM,False
+"Слабо светло во скалите, жарулата треба замена",ELECTRICAL,LOW,False
+"Светлото трепери во станот, не престанува веќе 8 часа",ELECTRICAL,MEDIUM,False
+"Tree brought down power pole on Никола Карев, wire lying on road – live",MECHANICAL,CRITICAL,False
+"Искри и чад кај трафото ТС Влае, непознат извор, пријавувам молам брзо!",OTHER,HIGH,True
+"Tree branch resting on wire near Визбегово, could snap in wind",MECHANICAL,MEDIUM,False
+"Communication with ТС Центар slow, high latency on all commands",NETWORK,MEDIUM,False
+"Telemetry врска изгубена со ТС Карпош, не можеме да мониторираме",NETWORK,HIGH,False
+"Minor rust on pole on Кочо Рацин, not urgent",MECHANICAL,LOW,False
+"Загубивме читање од 33 бројачи во Визбегово, неколку часа без податок",NETWORK,HIGH,False
+"Smoke from electrical cabinet near Никола Карев, around 30 alarmed residents",ELECTRICAL,HIGH,True
+Анкерот на столбот е ослабнат по последните дождови,MECHANICAL,MEDIUM,False
+Струјата се исклучува и вклучува неколку пати на час,ELECTRICAL,MEDIUM,False
+"Лозинката не може да се смени, копчето не реагира",SOFTWARE,MEDIUM,False
+"Непознат предмет фрлен на жиците на Ѓуро Стругар, виси и се заканува ургентно!",OTHER,HIGH,False
+"Гола жица паднала на ул. Партизанска бр.88, деца играат близу, ИТНО!!!",ELECTRICAL,CRITICAL,True
+"Сензорот A-440 еднаш пројавил грешка, потоа само",NETWORK,LOW,False
+"Модулот за извештаи фрла грешка 500, ништо не работи",SOFTWARE,HIGH,False
+Animal (куче?) found stuck near transformer at Центар,OTHER,MEDIUM,False
+Скршена бандера на Климент Охридски по сообраќајка – жива жица виси! ИТНО!!!,MECHANICAL,HIGH,True
+"Порталот за пријава не прима барања наутро, сите испорачувачи блокирани",SOFTWARE,HIGH,False
+"Трансформаторот малку вибрира, не е нова состојба",MECHANICAL,LOW,False
+"Порталот за пријава не прима барања пред некој час, сите испорачувачи блокирани",SOFTWARE,HIGH,False
+"Lights flickering all evening, cannot identify cause",ELECTRICAL,MEDIUM,False
+"Lights flickering all evening, cannot identify cause",ELECTRICAL,MEDIUM,False
+Animal (птица?) found stuck near transformer at Сарај,OTHER,MEDIUM,False
+"Foreign object thrown onto power lines near Бутел, hanging dangerously URGENT!",OTHER,HIGH,False
+Multiple buildings in Дексион lost power after last night's storm emergency!,ELECTRICAL,HIGH,False
+Столб се наклонил опасно по силниот ветер кај Кисела Вода ИТНО!!!,MECHANICAL,HIGH,False
+Апликацијата за пријавување дефекти падна по ажурирањето,SOFTWARE,HIGH,False
+Системот за SCADA паднал – диспечерите не можат да работат!,SOFTWARE,CRITICAL,False
+Power outage in single building since this morning,ELECTRICAL,MEDIUM,False
+"Smart meter missed one reading last week, has not recurred",NETWORK,LOW,False
+Трудница падна поради лоша тротоарска плоча до столб на Максим Горки ИТНО!!!,OTHER,HIGH,False
+"Map view stuck on loading spinner, never loads",SOFTWARE,MEDIUM,False
+"Вандализам на трафостаницата кај Центар – скршена врата, изложена внатрешност",OTHER,HIGH,False
+"Гулаб направил гнездо во ормарот, дали е проблем?",OTHER,MEDIUM,False
+"Meter readings not updating, suspected connection issue",NETWORK,MEDIUM,False
+"Dispatch interface not loading, blank screen after login",SOFTWARE,HIGH,False
+Уличната ламба на Илинденска изгасена веќе неколку дена,ELECTRICAL,LOW,False
+"Мирис на нешто, но слаб, можеби ништо",OTHER,LOW,False
+"Паѓа напонот секое вечер околу 19:30ч, уредите се исклучуваат",ELECTRICAL,MEDIUM,False
+"Жива жица паднала на Скупи по бурата, луѓе наоколу, ИТНО!!!",MECHANICAL,CRITICAL,True
+Electricity cuts in and out every few minutes,ELECTRICAL,MEDIUM,False
+"Гранки растат блиску до жиците на Страшо Пинџур, може да е проблем",OTHER,MEDIUM,False
+"Гулаб направил гнездо во ормарот, дали е проблем?",OTHER,MEDIUM,False
+Мириса на нешто чудно кај ормарот за струја на Партизанска,OTHER,MEDIUM,False
+Светилката пред влезот на зградата е изгорена,ELECTRICAL,LOW,False
+No electricity in apartment on Борис Кидрич number 59,ELECTRICAL,MEDIUM,False
+Reports module returning HTTP 500 consistently,SOFTWARE,HIGH,False
+"Smoke and sparks from transformer Т-512, large area affected",ELECTRICAL,HIGH,True
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+Smart meter мерило 30241 not reporting data for 3 days,NETWORK,MEDIUM,False
+"Downed wire on Цветан Димов, possibly energized, people staying away ургентно!",MECHANICAL,HIGH,True
+"Стар кабел видлив на Васил Ѓоргов, не знам дали е под напон",OTHER,MEDIUM,True
+"Еден приклучок не работи, останатите добри",ELECTRICAL,LOW,False
+"Occasional telemetry lag on sensor F-771, not impacting ops",NETWORK,LOW,False
+Читањата на мерило 30241 не се ажурираат редовно,NETWORK,MEDIUM,False
+"Meter readings not updating, suspected connection issue",NETWORK,MEDIUM,False
+"Искра скокнала при менување на осигурувачот, можен пожар",ELECTRICAL,HIGH,True
+Прекинувачот кај Борис Кидрич бр.45 не работи правилно,ELECTRICAL,MEDIUM,False
+"Live wire on road after storm near Побожје, traffic stopped",MECHANICAL,HIGH,True
+Автоматскиот систем за рекапсулирање не реагира – опасност!,SOFTWARE,CRITICAL,False
+"Foreign object thrown onto power lines near Чаир, hanging dangerously",OTHER,HIGH,False
+"Рѓа на вратата на ормарот, само козметика",OTHER,LOW,False
+"Светло малку трепери попладне, не е сериозно",ELECTRICAL,LOW,False
+"Telemetry врска изгубена со ТС Чаир, не можеме да мониторираме",NETWORK,HIGH,False
+"Трафо ТС Скопје Север испушта чад, комшиите се плашат, пријавено попладне ИТНО!!!",ELECTRICAL,HIGH,True
+"Трансформаторот малку вибрира, не е нова состојба",MECHANICAL,LOW,False
+Бројачот за струја прави чуден звук кај нас,ELECTRICAL,MEDIUM,False
+Вода навлегла во кабелскиот ормар по вчерашниот дожд,OTHER,MEDIUM,False
+"Something looks different near cabinet on Кочо Рацин, cannot tell what",OTHER,LOW,False
+"Мириса на горена пластика кај ормарот за стуја на Васил Ѓоргов, непознат извор",OTHER,HIGH,False
+"Pole slightly tilted near Бразда, needs inspection",MECHANICAL,MEDIUM,False
+Преводот на македонски е погрешен на некои места,SOFTWARE,LOW,False
+Струјата се исклучува и вклучува неколку пати на час,ELECTRICAL,MEDIUM,False
+Експлозија на трансформаторот ТС Карпош – гори! Пожарникари веднаш!!!,ELECTRICAL,CRITICAL,True
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+"Едно уличното светло трепери на Васил Ѓоргов, не е итно",ELECTRICAL,LOW,False
+Бројачот за струја прави чуден звук кај нас,ELECTRICAL,MEDIUM,False
+"Прекин кај 500 домаќинства на Климент Охридски, средна зона",ELECTRICAL,MEDIUM,False
+"Непознат предмет фрлен на жиците на Даме Груев, виси и се заканува помогнете!",OTHER,HIGH,False
+"Комуникацијата со Т-117 е бавна, одговорите задоцнуваат",NETWORK,MEDIUM,False
+Entire Ѓуро Стругар street without electricity since overnight,ELECTRICAL,HIGH,False
+"Кабелскиот ормар е со скршена врата, изложени жици внатре",MECHANICAL,MEDIUM,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+Multiple buildings in Аеродром lost power after last night's storm,ELECTRICAL,HIGH,False
+"Нема струја во блокот на Даме Груев од 19:30ч, веќе 6 часа",ELECTRICAL,MEDIUM,False
+"Чад излегува од трафот ТС Чаир на Борис Кидрич, дојдете да проверите",ELECTRICAL,HIGH,True
+"Broken pole after accident on Страшо Пинџур, live wire hanging loose",MECHANICAL,HIGH,True
+"Smoke and sparks from transformer Т-208, large area affected",ELECTRICAL,HIGH,True
+"Жицата прави мал звук при ветер, обично е тивка",MECHANICAL,LOW,False
+"Столбот е накривен на Гоце Делчев бр.92, не е паднат уште",MECHANICAL,MEDIUM,False
+"RTU на ТС Гази Баба не одговара воопшто, немаме никаква телеметрија!",NETWORK,CRITICAL,False
+Three poles damaged in last night's wind storm near Гази Баба please help!,MECHANICAL,HIGH,False
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+"Downed wire on Кочо Рацин, possibly energized, area cordoned off please help!",MECHANICAL,HIGH,True
+Уличното светло не работи на ул. Кочо Рацин бр.57,ELECTRICAL,LOW,False
+"RTU на ТС Бутел не одговара воопшто, немаме никаква телеметрија!",NETWORK,CRITICAL,False
+"Гола жица паднала на ул. Македонија бр.128, деца играат близу, ИТНО!!!",ELECTRICAL,CRITICAL,True
+"Cannot log in to system, authentication error 403 for all users",SOFTWARE,HIGH,False
+Струјата исклучена во повеќе блокови во Ѓорче Петров – 10 семејства засегнати,ELECTRICAL,HIGH,False
+Slightly higher meter reading than usual this month,ELECTRICAL,LOW,False
+"Fire visible near power line on Скупи, unidentified origin, please send crew",OTHER,CRITICAL,True
+"Жицата прави мал звук при ветер, обично е тивка",MECHANICAL,LOW,False
+Animal (куче?) found stuck near transformer at Чаир,OTHER,MEDIUM,False
+Fault list only shows 10 rows regardless of filter settings,SOFTWARE,MEDIUM,False
+"Жицата скинала по ветерот, виси многу ниско над Скупи – опасно!",MECHANICAL,CRITICAL,False
+"Кабелот во подрумот е ороден, треба замена",ELECTRICAL,MEDIUM,False
+Voltage drops whenever using heavy appliances on Македонија,ELECTRICAL,MEDIUM,False
+"Downed live wire on Максим Горки, sparks flying, pedestrians close by, URGENT",ELECTRICAL,CRITICAL,True
+Чуден силен звук од трафото ТС Влае – непознат извор,OTHER,HIGH,False
+"По невремето синоќа, струјата не се вратила во Шуто Оризари",ELECTRICAL,HIGH,False
+No electricity in apartment on Скупи number 105,ELECTRICAL,MEDIUM,False
+"Чад и пламен излегуваат од ел. ормарот во деловниот објект на Гоце Делчев, ИТНО!",ELECTRICAL,CRITICAL,True
+"Жица виси ниско над улицата Гоце Делчев, опасно за сообраќај",MECHANICAL,HIGH,False
+PDF export produces a blank document every time,SOFTWARE,MEDIUM,False
+Трудница падна поради лоша тротоарска плоча до столб на Питу Гули,OTHER,HIGH,False
+"Meter sync delay, minor and intermittent",NETWORK,LOW,False
+"При прикачување фото на пријавата, апликацијата паѓа",SOFTWARE,MEDIUM,False
+"Customer portal freezes on the submit button, cannot file reports",SOFTWARE,MEDIUM,False
+"Transformer vibrating slightly more than usual, low concern",MECHANICAL,LOW,False
+"Не сум сигурен дека ова е проблем, но пријавувам – чуден звук",OTHER,LOW,False
+"Neighbours complaining about noise, unsure of source",OTHER,MEDIUM,False
+"Бројачот бројач 4471203 не синхронизирал 1 дена, ситница",NETWORK,LOW,False
+"Неколку приклучоци мртви во станот, останатите работат",ELECTRICAL,MEDIUM,False
+"Fallen pole landed on car on Питу Гули, wire energized, call emergency now",MECHANICAL,CRITICAL,True
+"Sparks observed near cable box on Даме Груев, source unclear",OTHER,HIGH,True
+Voltage drops whenever using heavy appliances on Мито Хаџивасилев,ELECTRICAL,MEDIUM,False
+Голема искра од трафо станицата ТС Аеродром на ул. Орце Николов,ELECTRICAL,HIGH,True
+Датумот во извештајот е во погрешен формат,SOFTWARE,LOW,False
+"Непознат предмет фрлен на жиците на Ѓуро Стругар, виси и се заканува молам брзо!",OTHER,HIGH,False
+Бројачот покажува малку повисока потрошувачка овој месец,ELECTRICAL,LOW,False
+"Комуникациски проблем со SCADA, повеќе уреди недостапни",NETWORK,HIGH,False
+Системот за SCADA паднал – диспечерите не можат да работат!,SOFTWARE,CRITICAL,False
+"Не сум сигурен дека ова е проблем, но пријавувам – чуден звук",OTHER,LOW,False
+Чуден мирис попладне кај трансформаторот – не знам причина,OTHER,MEDIUM,False
+Апликацијата за пријавување дефекти падна по ажурирањето,SOFTWARE,HIGH,False
+Registration confirmation email not being sent to users,SOFTWARE,MEDIUM,False
+"Бројачот бројач 9920145 не синхронизирал 18 дена, ситница",NETWORK,LOW,False
+Повеќе паметни бројачи во Кисела Вода не испраќаат податоци,NETWORK,HIGH,False
+"Прекинувачот во гаражата паднал, не е голем проблем",ELECTRICAL,LOW,False
+"Стар кабел видлив на Партизанска, не знам дали е под напон",OTHER,MEDIUM,True
+"Cable box door broken, wiring exposed inside",MECHANICAL,MEDIUM,False
+"Neighbourhood Ѓорче Петров without power for 10 hours, no update",ELECTRICAL,HIGH,False
+"Вандализам на знакот кај трафостаницата – само боја, нема штета",OTHER,LOW,False
+"One flickering lamp on Орце Николов, nothing urgent",ELECTRICAL,LOW,False
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+"Graffiti on sign near substation, just paint, no structural damage",OTHER,LOW,False
+Crisis management application unavailable during active incident,SOFTWARE,CRITICAL,False
+"Нешто изгледа различно кај ормарот на Максим Горки, не знам точно",OTHER,LOW,False
+"Map view stuck on loading spinner, never loads",SOFTWARE,MEDIUM,False
+No electricity in apartment on Кочо Рацин number 78,ELECTRICAL,MEDIUM,False
+Бројачот покажува малку повисока потрошувачка овој месец,ELECTRICAL,LOW,False
+Cable bracket damaged on pole on Македонија,MECHANICAL,MEDIUM,False
+"Нешто виси на жицата, изгледа пластична торба",MECHANICAL,LOW,False
+Сензорот F-771 имаше неколку исклучувања синоќа,NETWORK,MEDIUM,False
+Transformer casing visibly cracked on Питу Гули,MECHANICAL,MEDIUM,False
+Power outage in single building since since noon,ELECTRICAL,MEDIUM,False
+"Cable box door broken, wiring exposed inside",MECHANICAL,MEDIUM,False
+"Гулаб направил гнездо во ормарот, дали е проблем?",OTHER,MEDIUM,False
+"Чад и пламен излегуваат од ел. ормарот во зградата на Страшо Пинџур, ИТНО!",ELECTRICAL,CRITICAL,True
+"One socket dead in apartment, all others fine",ELECTRICAL,LOW,False
+"Детето ми рекло дека видело искра кај ормарот, но не сум сигурен",OTHER,MEDIUM,True
+"Жица паднала на playground во Кисела Вода, деца евакуирани, ИТНО!!!",MECHANICAL,CRITICAL,False
+Покривот ми го оштетил кабелот при реновирање,MECHANICAL,MEDIUM,False
+Апликацијата е малку побавна отколку обично уште од вчера,SOFTWARE,LOW,False
+"Чад излегува од подземен кабел на Борис Кидрич, ве молам проверете!",OTHER,HIGH,True
+"Live wire on road after storm near Нерези, traffic stopped",MECHANICAL,HIGH,True
+"Something hanging from wire near Бутел, looks like a bag",MECHANICAL,LOW,False
+Преводот на македонски е погрешен на некои места,SOFTWARE,LOW,False
+Диспечерскиот центар без податоци веќе 2 часа – ИТНО!,NETWORK,CRITICAL,False
+"Ticket creation blocked by server error, operators cannot log faults",SOFTWARE,HIGH,False
+"Трансформаторот Т-208 дава искри и чад, пожарот може да избие секој момент!",ELECTRICAL,CRITICAL,True
+"Нешто чудно кај мерачот, не знам дали е нормално",OTHER,MEDIUM,False
+"Рѓа на столбот, само козметичка штета, нема ризик",MECHANICAL,LOW,False
+"Жицата скинала по ветерот, виси многу ниско над Даме Груев – опасно!",MECHANICAL,CRITICAL,False
+"По невремето синоќа, три столба скршени на Климент Охридски ИТНО!!!",MECHANICAL,HIGH,False
+"Видов возило да паркира до трансформаторот, дали е ОК?",OTHER,LOW,False
+Dropdown menu not closing automatically after selection,SOFTWARE,LOW,False
+Трудница падна поради лоша тротоарска плоча до столб на Васил Ѓоргов ургентно!,OTHER,HIGH,False
+"RTU на подстаницата ТС Бутел не одговара, нема статус",NETWORK,HIGH,False
+"Пожар во трафо станицата кај Ново Лисиче, чад и пламен, евакуација!",ELECTRICAL,CRITICAL,True
+"Пожар во трафо станицата кај Лисиче, чад и пламен, евакуација!",ELECTRICAL,CRITICAL,True
+"Дрво паднало на жиците кај Нерези, струјата прекината",MECHANICAL,HIGH,False
+"Контејнер паркиран блиску до ормарот, ограничен пристап",OTHER,LOW,False
+"Мал проблем со осветлувањето во ходникот, не е итно",ELECTRICAL,LOW,False
+Анкерот на столбот е ослабнат по последните дождови,MECHANICAL,MEDIUM,False
+Transformer casing visibly cracked on Илинденска,MECHANICAL,MEDIUM,False
+"Downed wire on Страшо Пинџур, possibly energized, people staying away помогнете!",MECHANICAL,HIGH,True
+"Гранки растат блиску до жиците на Партизанска, може да е проблем",OTHER,MEDIUM,False
+"Нема струја на цела ул. Орце Николов, над 80 станари пријавуваат",ELECTRICAL,HIGH,False
+"Foreign object thrown onto power lines near Карпош, hanging dangerously please help!",OTHER,HIGH,False
+"Мал проблем со осветлувањето во ходникот, не е итно",ELECTRICAL,LOW,False
+Water inside cable cabinet after heavy rain on Борис Кидрич,OTHER,MEDIUM,False
+"Something hanging from wire near Лисиче, looks like a bag",MECHANICAL,LOW,False
+"Столб оштетен во сообраќајка на Мито Хаџивасилев, жиците нестабилни",MECHANICAL,HIGH,False
+"Нешто изгледа различно кај ормарот на Максим Горки, не знам точно",OTHER,LOW,False
+Повеќе паметни бројачи во Ново Лисиче не испраќаат податоци,NETWORK,HIGH,False
+"Strange smell near electrical cabinet on Македонија, source unclear",OTHER,MEDIUM,False
+Паметниот бројач еднаш пропуштил читање – еднократно,NETWORK,LOW,False
+"Vehicle parked right next to transformer, is that a problem?",OTHER,LOW,False
+"Cable looks slightly worn near Бардовци, just for records",MECHANICAL,LOW,False
+Телеметријата со Т-512 го губи пакет еднаш на час,NETWORK,MEDIUM,False
+"Сензорот R-305 еднаш пројавил грешка, потоа само",NETWORK,LOW,False
+Minor translation error on the settings page,SOFTWARE,LOW,False
+"Мала задоцнетост во телеметријата, не е итно",NETWORK,LOW,False
+"Cable looks slightly worn near Горно Лисиче, just for records",MECHANICAL,LOW,False
+"Загуба на пакети кај RTU на ТС Гази Баба, мрежата нестабилна",NETWORK,MEDIUM,False
+Сензорот M-118 имаше неколку исклучувања синоќа,NETWORK,MEDIUM,False
+"Нема струја во зградата на Кочо Рацин од 13:30ч, веќе 12 часа",ELECTRICAL,MEDIUM,False
+"Old cable visible at Питу Гули bр.80, unsure if it is energized",OTHER,MEDIUM,True
+"При прикачување фото на пријавата, апликацијата паѓа",SOFTWARE,MEDIUM,False
+Напонот паѓа кога ке вклучам клима или шпорет,ELECTRICAL,MEDIUM,False
+"Трансформаторот малку вибрира, не е нова состојба",MECHANICAL,LOW,False
+"Not sure if this is an issue, reporting just in case – odd sound near Питу Гули",OTHER,LOW,False
+"Слабо светло во скалите, жарулата треба замена",ELECTRICAL,LOW,False
+"Telemetry врска изгубена со ТС Скопје Север, не можеме да мониторираме",NETWORK,HIGH,False
+"Гранки растат блиску до жиците на Кочо Рацин, може да е проблем",OTHER,MEDIUM,False
+"Кабелот малку влажен по дождот, само пријавувам",MECHANICAL,LOW,False
+"Дрвото расте блиску до жицата кај Нерези, само информирам",MECHANICAL,LOW,False
+"Гулаб направил гнездо во ормарот, дали е проблем?",OTHER,MEDIUM,False
+"Power line very low over Никола Карев, trucks and buses cannot pass",MECHANICAL,HIGH,False
+"Возило удрило во ограда на трафостаница, нема видлива штета",OTHER,MEDIUM,False
+"Tree branch resting on wire near Аеродром, could snap in wind",MECHANICAL,MEDIUM,False
+Не можам да се логирам во системот – вратата блокирана,SOFTWARE,HIGH,False
+Entire Никола Карев street without electricity since since noon,ELECTRICAL,HIGH,False
+"Трафостаница ТС Гази Баба испушта чад и искри, опасно! молам брзо!",ELECTRICAL,HIGH,True
+"Неколку приклучоци мртви во станот, останатите работат",ELECTRICAL,MEDIUM,False
+"Vandalism at substation near Визбегово, door forced open, equipment exposed emergency!",OTHER,HIGH,False
+Комуникацијата со ТС Влае прекината по надградбата вечерва,NETWORK,HIGH,False
+"Нема струја во куќата на Кочо Рацин од 03:30ч, веќе 6 часа",ELECTRICAL,MEDIUM,False
+"Lights flickering all evening, cannot identify cause",ELECTRICAL,MEDIUM,False
+"Meter sync delay, minor and intermittent",NETWORK,LOW,False
+"Рѓа на столбот, само козметичка штета, нема ризик",MECHANICAL,LOW,False
+"Столб се заканува да падне на училиштето, евакуирајте веднаш!",MECHANICAL,CRITICAL,False
+Fault list only shows 10 rows regardless of filter settings,SOFTWARE,MEDIUM,False
+"Hallway light not working in building, can wait",ELECTRICAL,LOW,False
+"One flickering lamp on Страшо Пинџур, nothing urgent",ELECTRICAL,LOW,False
+"По невремето синоќа, три столба скршени на Орце Николов молам брзо!",MECHANICAL,HIGH,False
+Анкерот на столбот е ослабнат по последните дождови,MECHANICAL,MEDIUM,False
+"Возило удрило во ограда на трафостаница, нема видлива штета",OTHER,MEDIUM,False
+"Мирис на нешто, но слаб, можеби ништо",OTHER,LOW,False
+"Диспечерскиот dashboard целосно не работи, не можеме да управуваме!",SOFTWARE,CRITICAL,False
+"Smoke from electrical cabinet near Видое Смилевски, around 50 alarmed residents URGENT!",ELECTRICAL,HIGH,True
+Бројачот за струја прави чуден звук кај нас,ELECTRICAL,MEDIUM,False
+"Комуникациска грешка, сама се поправила, само пријавувам",NETWORK,LOW,False
+Уличното светло не работи на ул. Македонија бр.86,ELECTRICAL,LOW,False
+"Прекин кај 10 домаќинства на Максим Горки, средна зона",ELECTRICAL,MEDIUM,False
+"Трафостаница ТС Аеродром испушта чад и искри, опасно! ИТНО!!!",ELECTRICAL,HIGH,True
+Иконата за известување скриена зад друг елемент,SOFTWARE,LOW,False
+Сензор S-201 испраќа грешни вредности – дефект верувам,NETWORK,HIGH,False
+"Cable box door broken, wiring exposed inside",MECHANICAL,MEDIUM,False
+"Едно копче е на погрешно место – UI проблем, не итно",SOFTWARE,LOW,False
+Голем пожар кај трафостаницата Т-409 – пожарникарите се веќе на пат!,ELECTRICAL,CRITICAL,True
+Multiple buildings in Лисиче lost power after last night's storm emergency!,ELECTRICAL,HIGH,False
+Smart meter паметен бројач №8812 not reporting data for 5 days,NETWORK,MEDIUM,False
+"Кабелот малку влажен по дождот, само пријавувам",MECHANICAL,LOW,False
+"Old cable visible at Илинденска bр.107, unsure if it is energized",OTHER,MEDIUM,True
+"Мирис на нешто, но слаб, можеби ништо",OTHER,LOW,False
