@@ -7,6 +7,9 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import FaultsListPage from './pages/faults/FaultsListPage';
 import FaultSubmissionPage from './pages/faults/FaultSubmissionPage';
 import FaultDetailsPage from './pages/faults/FaultDetailsPage';
+import CrewDirectoryPage from './pages/crews/CrewDirectoryPage';
+import EquipmentRegistryPage from './pages/equipment/EquipmentRegistryPage';
+import LocationHistoryPage from './pages/faults/LocationHistoryPage';
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth();
@@ -58,9 +61,27 @@ const App = () => {
               </ProtectedRoute>
             } />
 
+            <Route path="/faults/history" element={
+              <ProtectedRoute>
+                <LocationHistoryPage />
+              </ProtectedRoute>
+            } />
+
             <Route path="/faults/:id" element={
               <ProtectedRoute>
                 <FaultDetailsPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/crews" element={
+              <ProtectedRoute>
+                <CrewDirectoryPage />
+              </ProtectedRoute>
+            } />
+
+            <Route path="/equipment" element={
+              <ProtectedRoute>
+                <EquipmentRegistryPage />
               </ProtectedRoute>
             } />
 
@@ -70,5 +91,6 @@ const App = () => {
       </BrowserRouter>
   );
 };
+
 
 export default App;

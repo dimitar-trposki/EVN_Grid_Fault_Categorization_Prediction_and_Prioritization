@@ -35,13 +35,13 @@ public class CrewController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'MANAGER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<List<CrewSummaryResponse>> listAll() {
         return ResponseEntity.ok(crewService.listAll());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'MANAGER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<CrewResponse> getById(@PathVariable Long id) {
         return ResponseEntity.ok(crewService.getById(id));
     }
@@ -67,7 +67,7 @@ public class CrewController {
     }
 
     @GetMapping("/available")
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'ADMIN')")
     public ResponseEntity<List<CrewResponse>> getAvailable() {
         return ResponseEntity.ok(crewService.getAvailable());
     }
@@ -87,7 +87,7 @@ public class CrewController {
     }
 
     @GetMapping("/{id}/members")
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'MANAGER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'MANAGER', 'ADMIN')")
     public ResponseEntity<List<CrewMemberResponse>> getMembers(@PathVariable Long id) {
         return ResponseEntity.ok(crewService.getMembers(id));
     }

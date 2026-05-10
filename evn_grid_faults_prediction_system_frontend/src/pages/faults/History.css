@@ -1,0 +1,28 @@
+/* History Page specific styles */
+.history-map-container {
+    height: 70vh;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #334155;
+}
+
+.hotspot-legend {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}

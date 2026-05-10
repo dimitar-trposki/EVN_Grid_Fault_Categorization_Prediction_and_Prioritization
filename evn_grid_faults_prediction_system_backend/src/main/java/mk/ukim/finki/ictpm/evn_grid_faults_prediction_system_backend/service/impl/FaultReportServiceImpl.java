@@ -189,7 +189,7 @@ public class FaultReportServiceImpl implements FaultReportService {
             FaultType faultType, FaultPriority faultPriority, FaultClassification faultClassification,
             FaultStatus status, Long locationId, Long regionId, Long customerId,
             LocalDateTime from, LocalDateTime to, Pageable pageable) {
-        Specification<FaultReport> spec = Specification.where((Specification<FaultReport>) null);
+        Specification<FaultReport> spec = Specification.where((root, query, cb) -> cb.conjunction());
         spec = spec.and(FaultSpecification.hasFaultType(faultType));
         spec = spec.and(FaultSpecification.hasFaultPriority(faultPriority));
         spec = spec.and(FaultSpecification.hasFaultClassification(faultClassification));

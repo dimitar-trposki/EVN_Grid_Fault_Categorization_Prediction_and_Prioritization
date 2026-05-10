@@ -52,7 +52,10 @@ public class CrewMapper {
             crew.getName(),
             crew.getCrewCode(),
             crew.getStatus(),
-            count
+            count,
+            crew.getCurrentLatitude(),
+            crew.getCurrentLongitude(),
+            crew.getRegion() != null ? crew.getRegion().getName() : null
         );
     }
 }

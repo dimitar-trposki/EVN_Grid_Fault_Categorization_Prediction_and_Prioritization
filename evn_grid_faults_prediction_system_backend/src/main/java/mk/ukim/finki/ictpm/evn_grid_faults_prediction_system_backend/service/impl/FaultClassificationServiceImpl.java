@@ -54,8 +54,7 @@ public class FaultClassificationServiceImpl implements FaultClassificationServic
     public ClassificationResponse getByFault(Long faultReportId) {
         return classificationRepository.findByFaultReportId(faultReportId)
                 .map(mapper::toResponse)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "No classification found for fault " + faultReportId));
+                .orElse(null);
     }
 
     @Override

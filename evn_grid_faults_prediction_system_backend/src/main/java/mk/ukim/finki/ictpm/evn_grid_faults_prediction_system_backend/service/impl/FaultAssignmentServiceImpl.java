@@ -208,7 +208,7 @@ public class FaultAssignmentServiceImpl implements FaultAssignmentService {
     public FaultAssignmentResponse getByFault(Long faultReportId) {
         return assignmentRepo.findFirstByFaultReportIdOrderByAssignedAtDesc(faultReportId)
                 .map(mapper::toResponse)
-                .orElseThrow(() -> new ResourceNotFoundException("No assignment found for fault " + faultReportId));
+                .orElse(null);
     }
 
     @Override

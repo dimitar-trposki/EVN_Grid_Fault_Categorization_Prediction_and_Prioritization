@@ -75,12 +75,12 @@ public interface FaultReportRepository extends JpaRepository<FaultReport, Long>,
                 FROM fault_status_history
                 GROUP BY fault_report_id
             ) first_rep ON first_rep.fault_report_id = fr.id
-            WHERE CAST(first_rep.first_at AS DATE) = CURRENT_DATE
+            WHERE CAST(first_rep.first_at AS DATE) = CAST(CURRENT_TIMESTAMP AS DATE)
             """, nativeQuery = true)
     long countFaultsToday();
 
     @Query(value = """
-            SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (ip.first_ip - r.first_rep)) / 60.0), 0.0)
+            SELECT COALESCE(AVG(DATEDIFF('SECOND', r.first_rep, ip.first_ip) / 60.0), 0.0)
             FROM (
                 SELECT fault_report_id, MIN(changed_at) AS first_rep
                 FROM fault_status_history
@@ -98,7 +98,7 @@ public interface FaultReportRepository extends JpaRepository<FaultReport, Long>,
     Double avgResponseTimeMinutes();
 
     @Query(value = """
-            SELECT COALESCE(AVG(EXTRACT(EPOCH FROM (res.first_res - r.first_rep)) / 60.0), 0.0)
+            SELECT COALESCE(AVG(DATEDIFF('SECOND', r.first_rep, res.first_res) / 60.0), 0.0)
             FROM (
                 SELECT fault_report_id, MIN(changed_at) AS first_rep
                 FROM fault_status_history
@@ -155,41 +155,41 @@ public interface FaultReportRepository extends JpaRepository<FaultReport, Long>,
 
     // Returns [period (String), count] grouped by day
     @Query(value = """
-            SELECT TO_CHAR(DATE_TRUNC('day', first_rep.first_at), 'YYYY-MM-DD') AS period, COUNT(*) AS cnt
+            SELECT FORMATDATETIME(first_rep.first_at, 'yyyy-MM-dd') AS period, COUNT(*) AS cnt
             FROM (
                 SELECT fault_report_id, MIN(changed_at) AS first_at
                 FROM fault_status_history
                 GROUP BY fault_report_id
             ) first_rep
             WHERE first_rep.first_at >= :from AND first_rep.first_at <= :to
-            GROUP BY DATE_TRUNC('day', first_rep.first_at)
-            ORDER BY DATE_TRUNC('day', first_rep.first_at)
+            GROUP BY FORMATDATETIME(first_rep.first_at, 'yyyy-MM-dd')
+            ORDER BY period
             """, nativeQuery = true)
     List<Object[]> countByPeriodDay(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
     @Query(value = """
-            SELECT TO_CHAR(DATE_TRUNC('week', first_rep.first_at), 'IYYY-"W"IW') AS period, COUNT(*) AS cnt
+            SELECT FORMATDATETIME(first_rep.first_at, 'yyyy-ww') AS period, COUNT(*) AS cnt
             FROM (
                 SELECT fault_report_id, MIN(changed_at) AS first_at
                 FROM fault_status_history
                 GROUP BY fault_report_id
             ) first_rep
             WHERE first_rep.first_at >= :from AND first_rep.first_at <= :to
-            GROUP BY DATE_TRUNC('week', first_rep.first_at)
-            ORDER BY DATE_TRUNC('week', first_rep.first_at)
+            GROUP BY FORMATDATETIME(first_rep.first_at, 'yyyy-ww')
+            ORDER BY period
             """, nativeQuery = true)
     List<Object[]> countByPeriodWeek(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 
     @Query(value = """
-            SELECT TO_CHAR(DATE_TRUNC('month', first_rep.first_at), 'YYYY-MM') AS period, COUNT(*) AS cnt
+            SELECT FORMATDATETIME(first_rep.first_at, 'yyyy-MM') AS period, COUNT(*) AS cnt
             FROM (
                 SELECT fault_report_id, MIN(changed_at) AS first_at
                 FROM fault_status_history
                 GROUP BY fault_report_id
             ) first_rep
             WHERE first_rep.first_at >= :from AND first_rep.first_at <= :to
-            GROUP BY DATE_TRUNC('month', first_rep.first_at)
-            ORDER BY DATE_TRUNC('month', first_rep.first_at)
+            GROUP BY FORMATDATETIME(first_rep.first_at, 'yyyy-MM')
+            ORDER BY period
             """, nativeQuery = true)
     List<Object[]> countByPeriodMonth(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
 }

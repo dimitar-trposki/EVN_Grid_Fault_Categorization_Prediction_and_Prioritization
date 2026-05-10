@@ -63,8 +63,7 @@ public class FaultPriorityServiceImpl implements FaultPriorityService {
     public FaultPriorityResponse getByFault(Long faultReportId) {
         return priorityRepository.findByFaultReportId(faultReportId)
                 .map(mapper::toResponse)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "No priority record found for fault " + faultReportId));
+                .orElse(null);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class FaultAssignmentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'ADMIN')")
     public ResponseEntity<FaultAssignmentResponse> assignCrew(
             @Valid @RequestBody AssignCrewRequest request,
             @AuthenticationPrincipal UserDetails principal) {
@@ -54,7 +54,7 @@ public class FaultAssignmentController {
     }
 
     @GetMapping("/fault/{faultId}")
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'MANAGER', 'ADMIN', 'FIELD_CREW')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'MANAGER', 'ADMIN', 'FIELD_CREW')")
     public ResponseEntity<FaultAssignmentResponse> getByFault(@PathVariable Long faultId) {
         return ResponseEntity.ok(assignmentService.getByFault(faultId));
     }
@@ -66,7 +66,7 @@ public class FaultAssignmentController {
     }
 
     @GetMapping("/recommendations/{faultId}")
-    @PreAuthorize("hasAnyRole('DISPATCHER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('OPERATOR', 'DISPATCHER', 'ADMIN')")
     public ResponseEntity<List<CrewRecommendationResponse>> recommendCrews(@PathVariable Long faultId) {
         return ResponseEntity.ok(assignmentService.recommendCrews(faultId));
     }

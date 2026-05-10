@@ -37,6 +37,10 @@ public class Crew {
     @Column(name = "current_longitude")
     private Double currentLongitude;
 
+    @ManyToOne
+    @JoinColumn(name = "region_id")
+    private Region region;
+
     @OneToMany(mappedBy = "crew", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CrewMember> crewMembers;
 
