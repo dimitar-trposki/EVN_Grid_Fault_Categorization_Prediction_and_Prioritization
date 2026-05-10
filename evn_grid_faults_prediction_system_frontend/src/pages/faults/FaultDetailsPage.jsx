@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../context/authStore';
+import { useParams, Link } from 'react-router-dom';
 import faultRepository from '../../api/faultRepository';
 import Navbar from '../../components/Navbar';
 import './Faults.css';
 
 const FaultDetailsPage = () => {
     const { id } = useParams();
-    const { user } = useAuth();
-    const navigate = useNavigate();
 
     const [fault, setFault] = useState(null);
     const [history, setHistory] = useState([]);
@@ -18,10 +15,6 @@ const FaultDetailsPage = () => {
     const [loading, setLoading] = useState(true);
 
     const [uploading, setUploading] = useState(false);
-
-    useEffect(() => {
-        fetchData();
-    }, [id]);
 
     const fetchData = async () => {
         setLoading(true);
@@ -47,6 +40,10 @@ const FaultDetailsPage = () => {
         }
     };
 
+    useEffect(() => {
+        fetchData();
+    }, [id]);
+
     const handleFileUpload = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -59,9 +56,16 @@ const FaultDetailsPage = () => {
             await faultRepository.uploadAttachment(id, formData);
             const attRes = await faultRepository.getAttachments(id);
             setAttachments(attRes.data);
+            e.target.value = null; // reset input
         } catch (err) {
             console.error('Failed to upload', err);
-            alert('Upload failed');
+            let errorMsg = 'Upload failed';
+            if (err.response?.data) {
+                errorMsg = typeof err.response.data === 'string' 
+                    ? err.response.data 
+                    : JSON.stringify(err.response.data);
+            }
+            alert(errorMsg);
         } finally {
             setUploading(false);
         }

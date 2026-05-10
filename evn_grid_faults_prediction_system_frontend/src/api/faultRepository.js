@@ -17,7 +17,9 @@ const faultRepository = {
     // Attachments
     getAttachments: (id) => api.get(`/v1/faults/${id}/attachments`),
     uploadAttachment: (id, formData) => api.post(`/v1/faults/${id}/attachments`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: {
+            'Content-Type': undefined
+        }
     }),
     downloadAttachment: (faultId, attachmentId) => api.get(`/v1/faults/${faultId}/attachments/${attachmentId}/download`, { responseType: 'blob' }),
 
