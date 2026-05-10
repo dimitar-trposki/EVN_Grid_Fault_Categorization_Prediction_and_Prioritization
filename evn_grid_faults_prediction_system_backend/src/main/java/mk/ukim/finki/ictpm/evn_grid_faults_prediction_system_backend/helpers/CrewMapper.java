@@ -1,5 +1,6 @@
 package mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.helpers;
 
+import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.CrewMemberResponse;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.CrewResponse;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.CrewSummaryResponse;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.domain.Crew;
@@ -22,15 +23,21 @@ public class CrewMapper {
         if (crew == null) {
             return null;
         }
-        List<mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.dto.CrewMemberResponse> memberResponses = new ArrayList<>();
+        List<CrewMemberResponse> memberResponses = new ArrayList<>();
         if (crew.getCrewMembers() != null) {
             memberResponses = crew.getCrewMembers().stream()
                 .map(crewMemberMapper::toResponse)
                 .collect(Collectors.toList());
         }
+        int memberCount = memberResponses.size();
         return new CrewResponse(
             crew.getId(),
             crew.getName(),
+            crew.getCrewCode(),
+            crew.getStatus(),
+            crew.getCurrentLatitude(),
+            crew.getCurrentLongitude(),
+            memberCount,
             memberResponses
         );
     }
@@ -43,6 +50,8 @@ public class CrewMapper {
         return new CrewSummaryResponse(
             crew.getId(),
             crew.getName(),
+            crew.getCrewCode(),
+            crew.getStatus(),
             count
         );
     }

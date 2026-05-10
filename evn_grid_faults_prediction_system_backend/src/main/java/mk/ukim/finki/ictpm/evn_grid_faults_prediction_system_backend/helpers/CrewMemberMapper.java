@@ -16,7 +16,9 @@ public class CrewMemberMapper {
             member.getFirstName(),
             member.getLastName(),
             member.getUser() != null ? member.getUser().getId() : null,
-            member.getPosition()
+            member.getPosition(),
+            member.getUser() != null ? member.getUser().getEmail() : null,
+            member.getAssignedAt()
         );
     }
 }

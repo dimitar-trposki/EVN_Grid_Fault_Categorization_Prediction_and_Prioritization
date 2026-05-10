@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/** @deprecated Use InterventionResponse */
+@Deprecated
 @Getter
 @Setter
 @AllArgsConstructor

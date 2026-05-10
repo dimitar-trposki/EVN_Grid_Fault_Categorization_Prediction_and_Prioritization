@@ -159,7 +159,8 @@
 - [x] **Mapper(s)** — `FaultReportMapper` (toResponse, toSummaryResponse), `FaultStatusHistoryMapper` (toResponse)
 - [x] **Migration** — auto-DDL (`ddl-auto=create-drop`) + Flyway disabled; no migration scripts needed for dev/H2.
   `ImportServiceImpl` patched with `fault.setSourceType(FaultSourceType.IMPORTED)` (minimal fix, no structural change).
-  Old DTOs (`CreateFaultReportDto`, `ChangeStatusDto`, `FaultReportResponseDto`, `StatusHistoryDto`) marked `@Deprecated`.
+  Old DTOs (`CreateFaultReportDto`, `ChangeStatusDto`, `FaultReportResponseDto`, `StatusHistoryDto`) marked
+  `@Deprecated`.
 
 ---
 
@@ -168,9 +169,11 @@
 > Covers: upload file(s) to a fault report, download attachment, list attachments per fault.
 
 - [x] **Entity changes** — `Attachment`: added `fileType` (MIME, not null), `fileSize` (bytes, not null), `uploadedAt`
-  (not null), `uploadedByUser` (ManyToOne User, nullable lazy), `uploadedByCustomer` (ManyToOne Customer, nullable lazy);
+  (not null), `uploadedByUser` (ManyToOne User, nullable lazy), `uploadedByCustomer` (ManyToOne Customer, nullable
+  lazy);
   enforced in service (exactly one non-null per upload)
-- [x] **Repository custom methods** — `AttachmentRepository`: `findByFaultReportId` (existed), `existsByIdAndFaultReportId`
+- [x] **Repository custom methods** — `AttachmentRepository`: `findByFaultReportId` (existed),
+  `existsByIdAndFaultReportId`
   (new — used for ownership check in download/delete)
 - [x] **Request DTOs** — none (uses `MultipartFile` + `@AuthenticationPrincipal`)
 - [x] **Response DTOs** — `AttachmentResponse` (id, fileName, fileType, fileSize, uploadedAt) (record)
@@ -189,7 +192,8 @@
   `GET /{attachmentId}/download` (authenticated), `DELETE /{attachmentId}` (authenticated)
 - [x] **Mapper(s)** — `helpers/AttachmentMapper` (`@Component`)
 - [x] **Config** — `application.properties`: `app.attachments.storage-path=./uploads/attachments`,
-  `app.attachments.max-size-bytes=10485760`, `app.attachments.allowed-types=image/jpeg,image/png,image/jpg,application/pdf`
+  `app.attachments.max-size-bytes=10485760`,
+  `app.attachments.allowed-types=image/jpeg,image/png,image/jpg,application/pdf`
 - [x] **gitignore** — `/uploads/` added
 - [x] **Custom exceptions** — `BadRequestException` for invalid file type/size; `ResourceNotFoundException` for missing
   fault/attachment; `AttachmentDto` marked `@Deprecated`
@@ -312,20 +316,20 @@
 > Covers: admin/dispatcher view and CRUD of crews and their members; availability tracking.
 > Partially done: `CrewService/Impl`, `CrewController` exist (only list + getById + assignToFault).
 
-- [ ] **Repository custom methods** — `CrewRepository`: `findAvailableCrews` (no active assignment), `findByName`;
+- [x] **Repository custom methods** — `CrewRepository`: `findAvailableCrews` (no active assignment), `findByName`;
   `CrewMemberRepository`: `findByCrewId`, `findByUserId`
-- [ ] **Request DTOs** — `CreateCrewRequest`, `UpdateCrewRequest`, `AddCrewMemberRequest` (userId, position) (as
+- [x] **Request DTOs** — `CreateCrewRequest`, `UpdateCrewRequest`, `AddCrewMemberRequest` (userId, position) (as
   `record`s)
-- [ ] **Response DTOs** — `CrewResponse` (full, including members list), `CrewSummaryResponse`, `CrewMemberResponse` (as
+- [x] **Response DTOs** — `CrewResponse` (full, including members list), `CrewSummaryResponse`, `CrewMemberResponse` (as
   `record`s)
-- [ ] **Service interface** — extend `CrewService`: `create`, `update`, `delete`, `addMember`, `removeMember`,
+- [x] **Service interface** — extend `CrewService`: `create`, `update`, `delete`, `addMember`, `removeMember`,
   `getAvailable`; new `CrewMemberService`
-- [ ] **Service implementation** — rewrite `CrewServiceImpl` to fix exceptions, add missing CRUD; create
+- [x] **Service implementation** — rewrite `CrewServiceImpl` to fix exceptions, add missing CRUD; create
   `CrewMemberServiceImpl`
-- [ ] **Controller + endpoints** — fix `CrewController` to `/api/v1/crews`; add `POST`, `PUT /{id}`, `DELETE /{id}`,
+- [x] **Controller + endpoints** — fix `CrewController` to `/api/v1/crews`; add `POST`, `PUT /{id}`, `DELETE /{id}`,
   `GET /available`; `POST /{id}/members`, `DELETE /{id}/members/{memberId}`; `@PreAuthorize(DISPATCHER, ADMIN)`
-- [ ] **Mapper(s)** — `CrewMapper`, `CrewMemberMapper`
-- [ ] **Custom exceptions** — reuse `ResourceNotFoundException`, `ConflictException`
+- [x] **Mapper(s)** — `CrewMapper`, `CrewMemberMapper`
+- [x] **Custom exceptions** — reuse `ResourceNotFoundException`, `ConflictException`
 
 ---
 
@@ -335,22 +339,22 @@
 > `FaultAssignment` entity and `FaultAssigmentRepository` (typo in name) exist. Assignment logic currently embedded in
 `CrewServiceImpl`.
 
-- [ ] **Repository custom methods** — `FaultAssigmentRepository`: `findByFaultReportId`, `findByCrewId`,
+- [x] **Repository custom methods** — `FaultAssigmentRepository`: `findByFaultReportId`, `findByCrewId`,
   `findActiveByFaultReportId`, `findPendingByCrewId`
-- [ ] **Request DTOs** — `AssignCrewRequest` (crewId, assignmentNote), `ReassignRequest` (newCrewId, reason),
+- [x] **Request DTOs** — `AssignCrewRequest` (crewId, assignmentNote), `ReassignRequest` (newCrewId, reason),
   `AcceptAssignmentRequest` (accepted: boolean) (as `record`s)
-- [ ] **Response DTOs** — `AssignmentResponse` (id, faultId, crewId, crewName, status, assignedAt, acceptedAt, note),
+- [x] **Response DTOs** — `AssignmentResponse` (id, faultId, crewId, crewName, status, assignedAt, acceptedAt, note),
   `CrewRecommendationResponse` (recommended crew list with score/reason) (as `record`s)
-- [ ] **Service interface** — `FaultAssignmentService`: `assignCrew(Long faultId, AssignCrewRequest)`,
+- [x] **Service interface** — `FaultAssignmentService`: `assignCrew(Long faultId, AssignCrewRequest)`,
   `reassign(Long assignmentId, ReassignRequest)`, `acceptAssignment(Long assignmentId)`, `getByFault(Long faultId)`,
   `recommendCrew(Long faultId)`
-- [ ] **Service implementation** — `FaultAssignmentServiceImpl`: extract assignment logic from CrewServiceImpl;
+- [x] **Service implementation** — `FaultAssignmentServiceImpl`: extract assignment logic from CrewServiceImpl;
   implement recommendation (call AI client or simple heuristic by availability + location proximity)
-- [ ] **Controller + endpoints** — `FaultAssignmentController`: `POST /api/v1/faults/{id}/assignments` (DISPATCHER),
+- [x] **Controller + endpoints** — `FaultAssignmentController`: `POST /api/v1/faults/{id}/assignments` (DISPATCHER),
   `PUT /api/v1/assignments/{id}/accept` (FIELD_CREW), `PUT /api/v1/assignments/{id}/reassign` (DISPATCHER),
   `GET /api/v1/faults/{id}/assignments`, `GET /api/v1/faults/{id}/crew-recommendations`
-- [ ] **Mapper(s)** — `FaultAssignmentMapper`
-- [ ] **Custom exceptions** — `ConflictException` (crew already assigned); reuse `ResourceNotFoundException`
+- [x] **Mapper(s)** — `FaultAssignmentMapper`
+- [x] **Custom exceptions** — `ConflictException` (crew already assigned); reuse `ResourceNotFoundException`
 
 ---
 
@@ -359,21 +363,21 @@
 > Covers: start intervention, update notes/status, close case (resolved/closed).
 > Partially done: `InterventionService/Impl`, `InterventionController` exist (create + list by fault only).
 
-- [ ] **Repository custom methods** — `InterventionRepository`: `findByFaultReportId` (exists in impl), `findByCrewId`,
+- [x] **Repository custom methods** — `InterventionRepository`: `findByFaultReportId` (exists in impl), `findByCrewId`,
   `findByFaultReportIdAndResolutionStatus`
-- [ ] **Request DTOs** — `CreateInterventionRequest`, `UpdateInterventionRequest` (resolutionNotes, rootCause,
+- [x] **Request DTOs** — `CreateInterventionRequest`, `UpdateInterventionRequest` (resolutionNotes, rootCause,
   resolutionStatus, durationMinutes), `CloseInterventionRequest` (as `record`s)
-- [ ] **Response DTOs** — `InterventionResponse` (full: id, faultId, crewId, crewName, startedAt, endedAt,
+- [x] **Response DTOs** — `InterventionResponse` (full: id, faultId, crewId, crewName, startedAt, endedAt,
   durationMinutes, resolutionStatus, notes, rootCause) (as `record`)
-- [ ] **Service interface** — extend `InterventionService`: `update(Long id, UpdateInterventionRequest)`,
+- [x] **Service interface** — extend `InterventionService`: `update(Long id, UpdateInterventionRequest)`,
   `close(Long id, CloseInterventionRequest)`, `getById(Long id)`, `getByCrewId(Long crewId)`
-- [ ] **Service implementation** — extend `InterventionServiceImpl`: fix exceptions; add update, close (triggers status
+- [x] **Service implementation** — extend `InterventionServiceImpl`: fix exceptions; add update, close (triggers status
   change to RESOLVED/CLOSED); set `startedAt` on create, `endedAt` on close
-- [ ] **Controller + endpoints** — fix `InterventionController` to `/api/v1/interventions`; keep
+- [x] **Controller + endpoints** — fix `InterventionController` to `/api/v1/interventions`; keep
   `POST /api/v1/faults/{faultId}/interventions`; add `GET /{id}`, `PUT /{id}`, `PUT /{id}/close`;
   `@PreAuthorize(FIELD_CREW, DISPATCHER)`
-- [ ] **Mapper(s)** — `InterventionMapper`
-- [ ] **Custom exceptions** — `BadRequestException` (closing already-closed intervention); reuse others
+- [x] **Mapper(s)** — `InterventionMapper`
+- [x] **Custom exceptions** — `BadRequestException` (closing already-closed intervention); reuse others
 
 ---
 
@@ -557,9 +561,9 @@
 | 7  | AI Classification     | Done ✓                |
 | 8  | Risk Prediction       | Done ✓                |
 | 9  | Priority Scoring      | Done ✓                |
-| 10 | Crews & Crew Members  | In progress (partial) |
-| 11 | Fault Assignment      | In progress (partial) |
-| 12 | Interventions         | In progress (partial) |
+| 10 | Crews & Crew Members  | Done ✓                |
+| 11 | Fault Assignment      | Done ✓                |
+| 12 | Interventions         | Done ✓                |
 | 13 | Weather Integration   | Done ✓                |
 | 14 | Notifications         | In progress (partial) |
 | 15 | Dashboard & Analytics | Done ✓                |

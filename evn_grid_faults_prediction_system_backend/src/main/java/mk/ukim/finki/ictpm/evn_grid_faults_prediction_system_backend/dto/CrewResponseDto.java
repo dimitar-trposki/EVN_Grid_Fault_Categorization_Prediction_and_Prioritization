@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 
+/** @deprecated Use {@link CrewResponse} */
+@Deprecated
 @Getter
 @Setter
 @AllArgsConstructor

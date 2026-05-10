@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,4 +38,29 @@ public class Intervention {
             foreignKey = @ForeignKey(name = "fk_intervention_crew")
     )
     private Crew crew;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "location_id",
+            foreignKey = @ForeignKey(name = "fk_intervention_location")
+    )
+    private Location location;
+
+    @Column(name = "started_at")
+    private LocalDateTime startedAt;
+
+    @Column(name = "ended_at")
+    private LocalDateTime endedAt;
+
+    @Column(name = "duration_minutes")
+    private Integer durationMinutes;
+
+    @Column(name = "resolution_status", length = 20)
+    private String resolutionStatus;
+
+    @Column(name = "resolution_notes", columnDefinition = "TEXT")
+    private String resolutionNotes;
+
+    @Column(name = "root_cause", columnDefinition = "TEXT")
+    private String rootCause;
 }

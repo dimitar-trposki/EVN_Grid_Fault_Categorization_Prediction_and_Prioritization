@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mk.ukim.finki.ictpm.evn_grid_faults_prediction_system_backend.model.enums.FaultStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,8 +37,32 @@ public class FaultAssignment {
     )
     private Crew crew;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "assigned_by_user_id",
+            foreignKey = @ForeignKey(name = "fk_fault_assignment_assigned_by")
+    )
+    private User assignedByUser;
+
+    @Column(name = "assigned_at", nullable = false)
+    private LocalDateTime assignedAt;
+
+    @Column(name = "accepted_at")
+    private LocalDateTime acceptedAt;
+
+    @Column(name = "completed_at")
+    private LocalDateTime completedAt;
+
+    @Column(name = "assignment_status", nullable = false, length = 20)
+    private String assignmentStatus;
+
+    @Column(name = "assignment_note", columnDefinition = "TEXT")
+    private String assignmentNote;
+
+    /** @deprecated Kept for backward compat with dashboard queries; use assignmentStatus for Module 11 logic */
+    @Deprecated
     @Enumerated(EnumType.STRING)
-    @Column(name = "fault_status", nullable = false, length = 20)
+    @Column(name = "fault_status", length = 20)
     private FaultStatus faultStatus;
 
 }

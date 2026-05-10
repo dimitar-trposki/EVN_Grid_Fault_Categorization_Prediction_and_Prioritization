@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -41,5 +43,8 @@ public class CrewMember {
 
     @Column(name = "position", length = 80)
     private String position;
+
+    @Column(name = "assigned_at", nullable = false)
+    private LocalDateTime assignedAt;
 
 }

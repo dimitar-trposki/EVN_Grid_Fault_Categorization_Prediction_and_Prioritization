@@ -8,11 +8,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FaultAssigmentRepository extends JpaRepository<FaultAssignment, Long> {
 
     List<FaultAssignment> findByFaultReportId(Long faultId);
+
+    List<FaultAssignment> findByCrewId(Long crewId);
+
+    List<FaultAssignment> findByCrewIdAndAssignmentStatus(Long crewId, String assignmentStatus);
+
+    List<FaultAssignment> findByAssignmentStatus(String assignmentStatus);
+
+    Optional<FaultAssignment> findFirstByFaultReportIdOrderByAssignedAtDesc(Long faultReportId);
 
     @Query("SELECT COUNT(DISTINCT fa.crew.id) FROM FaultAssignment fa WHERE fa.faultStatus IN :statuses")
     long countDistinctActiveCrews(@Param("statuses") List<FaultStatus> statuses);
