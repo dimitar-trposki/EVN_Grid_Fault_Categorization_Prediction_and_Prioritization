@@ -116,13 +116,19 @@ public class DashboardServiceImpl implements DashboardService {
     public List<CrewPerformanceResponse> getCrewPerformance() {
         // avgDurationMin and efficiencyPercent cannot be computed — Intervention has no timestamp fields.
         return interventionRepository.countByCrew().stream()
-                .map(row -> new CrewPerformanceResponse(
-                        ((Number) row[0]).longValue(),
-                        (String) row[1],
-                        ((Number) row[2]).longValue(),
-                        0.0,
-                        0.0
-                ))
+                .map(row -> {
+                    Long crewId = ((Number) row[0]).longValue();
+                    Crew crew = crewRepository.findById(crewId).orElse(null);
+                    return new CrewPerformanceResponse(
+                            crewId,
+                            (String) row[1],
+                            crew != null && crew.getRegion() != null ? crew.getRegion().getName() : "Unknown",
+                            crew != null ? crew.getStatus().name() : "N/A",
+                            ((Number) row[2]).longValue(),
+                            0.0,
+                            0.0
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -161,8 +167,8 @@ public class DashboardServiceImpl implements DashboardService {
                         crew.getId(),
                         crew.getName(),
                         activeCrewIds.contains(crew.getId()) ? "ACTIVE" : "IDLE",
-                        null, // Crew entity has no latitude field
-                        null  // Crew entity has no longitude field
+                        crew.getCurrentLatitude(),
+                        crew.getCurrentLongitude()
                 ))
                 .collect(Collectors.toList());
     }

@@ -1,0 +1,28 @@
+/* Crew Directory specific styles */
+.crew-directory-container {
+    padding: 1rem;
+}
+
+.crew-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.crew-status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.status-idle {
+    background-color: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+}
+
+.status-working {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}

@@ -1,55 +1,109 @@
 .navbar {
+    background-color: #1e293b;
+    padding: 0.75rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    background-color: #1e293b;
     border-bottom: 1px solid #334155;
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 100;
 }
 
 .nav-logo {
-    color: #f1f5f9;
-    font-size: 1.3rem;
+    color: #3b82f6;
+    font-size: 1.5rem;
+    font-weight: 800;
     margin: 0;
+    letter-spacing: -0.025em;
+}
+
+.nav-center {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 2rem;
+}
+
+.nav-search {
+    width: 100%;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nav-search:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
-}
-
-.nav-welcome {
-    color: #94a3b8;
+    gap: 1.5rem;
 }
 
 .nav-link-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    border: 1px solid #c084fc;
-    background-color: transparent;
-    color: #c084fc;
+    background: none;
+    border: none;
+    color: #94a3b8;
     cursor: pointer;
-    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
 }
 
 .nav-link-btn:hover {
-    background-color: rgba(192, 132, 252, 0.1);
+    color: #3b82f6;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid #334155;
+}
+
+.nav-welcome {
+    color: #f1f5f9;
+    font-size: 0.9rem;
 }
 
 .nav-logout-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    border: none;
-    background-color: #ef4444;
-    color: white;
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: #f1f5f9;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 0.85rem;
     transition: background-color 0.2s ease;
 }
 
 .nav-logout-btn:hover {
-    background-color: #dc2626;
+    background-color: #ef4444;
+    border-color: #ef4444;
+}
+
+@media (max-width: 1024px) {
+    .nav-center {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+    .nav-right {
+        gap: 0.75rem;
+    }
+    .nav-welcome {
+        display: none;
+    }
 }

@@ -7,5 +7,8 @@ public record CrewSummaryResponse(
     String name,
     String crewCode,
     CrewStatus status,
-    int memberCount
+    int memberCount,
+    Double latitude,
+    Double longitude,
+    String regionName
 ) {}
