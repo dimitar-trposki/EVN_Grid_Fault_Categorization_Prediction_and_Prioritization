@@ -20,7 +20,7 @@ const LoginPage = () => {
         try {
             await login(credentials);
             navigate('/dashboard');
-        } catch (err) {
+        } catch {
             setError('Invalid email or password');
         } finally {
             setLoading(false);
