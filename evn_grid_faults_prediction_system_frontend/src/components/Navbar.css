@@ -107,3 +107,143 @@
         display: none;
     }
 }
+
+/* Notifications UI Additions */
+.nav-notification-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nav-bell-btn {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.nav-bell-btn:hover {
+    background-color: #334155;
+}
+
+.bell-badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #ef4444;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 999px;
+    border: 2px solid #1e293b;
+}
+
+.notif-dropdown {
+    position: absolute;
+    top: calc(100% + 15px);
+    right: -60px;
+    width: 320px;
+    max-height: 400px;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 200;
+}
+
+.notif-header {
+    padding: 1rem;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.clear-all-btn {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.clear-all-btn:hover {
+    text-decoration: underline;
+}
+
+.notif-body {
+    overflow-y: auto;
+    max-height: 340px;
+}
+
+.notif-msg {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.notif-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid #334155;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notif-item:hover {
+    background-color: #0f172a;
+}
+
+.notif-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #3b82f6;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.notif-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.notif-title {
+    margin: 0;
+    color: #f1f5f9;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.notif-text {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    line-height: 1.3;
+}
+
+.notif-time {
+    color: #64748b;
+    font-size: 0.7rem;
+    margin-top: 4px;
+}
+
