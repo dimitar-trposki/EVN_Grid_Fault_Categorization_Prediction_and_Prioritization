@@ -13,6 +13,7 @@ const faultRepository = {
     createByOperator: (data) => api.post('/v1/faults/operator', data),
     updateStatus: (id, statusData) => api.patch(`/v1/faults/${id}/status`, statusData),
     updateFault: (id, data) => api.put(`/v1/faults/${id}`, data),
+    deleteFault: (id) => api.delete(`/v1/faults/${id}`),
     
     // Attachments
     getAttachments: (id) => api.get(`/v1/faults/${id}/attachments`),
